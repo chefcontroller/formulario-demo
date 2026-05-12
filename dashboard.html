@@ -201,6 +201,41 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 .btn-reset{flex:1;padding:10px;background:var(--bg);border:1px solid var(--b);border-radius:var(--rs);font-size:13px;color:var(--t2);font-family:'Inter',sans-serif;cursor:pointer}
 .btn-guardar-met{flex:2;padding:10px;background:var(--p);border:none;border-radius:var(--rs);font-size:13px;font-weight:600;color:#fff;font-family:'Inter',sans-serif;cursor:pointer}
 
+/* VISTA EJECUTIVA */
+.exec-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.exec-kpi{background:var(--s);border:1.5px solid var(--b);border-radius:var(--r);padding:16px 18px}
+.exec-kpi-lbl{font-size:10px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.exec-kpi-val{font-size:22px;font-weight:700;color:var(--t);letter-spacing:-.5px;line-height:1}
+.exec-kpi-sub{font-size:11px;color:var(--t3);margin-top:4px}
+.exec-ranking{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.exec-rank-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--b)}
+.exec-rank-row:last-child{border-bottom:none}
+.exec-rank-pos{font-size:11px;font-weight:700;color:var(--t3);width:16px;flex-shrink:0;text-align:center}
+.exec-rank-nombre{font-size:12px;font-weight:600;color:var(--t);width:150px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exec-rank-bar-wrap{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.exec-rank-bar{height:100%;border-radius:4px;transition:width .6s ease}
+.exec-rank-monto{font-size:12px;font-weight:600;color:var(--t);width:90px;text-align:right;flex-shrink:0}
+.exec-rank-pct{font-size:10px;color:var(--t3);width:36px;text-align:right;flex-shrink:0}
+.exec-semaforo{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.exec-sem-table{width:100%;border-collapse:collapse;font-size:12px}
+.exec-sem-table thead th{padding:9px 14px;text-align:right;font-weight:500;color:var(--t2);border-bottom:2px solid var(--b);background:var(--bg);font-size:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.exec-sem-table thead th:first-child{text-align:left}
+.exec-sem-table tbody td{padding:10px 14px;border-bottom:1px solid var(--b);color:var(--t);text-align:right}
+.exec-sem-table tbody td:first-child{text-align:left;font-weight:600}
+.exec-sem-table tbody tr:last-child td{border-bottom:none}
+.exec-sem-table tbody tr:hover td{background:var(--bg)}
+.exec-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px}
+.exec-pill-ok{background:var(--ok-bg);color:var(--ok)}
+.exec-pill-warn{background:var(--warn-bg);color:#B45309}
+.exec-pill-err{background:var(--err-bg);color:var(--err)}
+.exec-pill-neu{background:var(--bg);color:var(--t3)}
+.exec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.exec-view-toggle{display:flex;gap:6px;margin-bottom:16px}
+.exec-vt-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--b);background:var(--s);color:var(--t2);font-family:'Inter',sans-serif;transition:all .15s}
+.exec-vt-btn.active{background:var(--p);border-color:var(--p);color:#fff}
+@media(max-width:900px){.exec-kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.exec-kpi-grid{grid-template-columns:1fr 1fr}.exec-rank-nombre{width:100px}}
+
 /* SIDEBAR OVERLAY MOBILE */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90}
 
@@ -324,6 +359,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         Delivery
       </button>
       <div class="sb-section">Sistema</div>
+      <button class="sb-item exec-only hidden" id="sbExecBtn" onclick="showExecView()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+        Vista ejecutiva
+      </button>
+      <button class="sb-item exec-only hidden" id="sbOperBtn" onclick="showOperView()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Vista operativa
+      </button>
       <button class="sb-item" onclick="irACarga()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Ir al formulario
@@ -434,6 +477,60 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 </div>
 </div>
 
+<!-- VISTA EJECUTIVA -->
+<div id="sExecView" style="display:none">
+<div class="dash-root">
+  <div class="dash-hdr">
+    <button class="hdr-hamburger" onclick="toggleSidebar()">&#9776;</button>
+    <div class="hdr-logo">
+      <div class="hdr-logo-mark">CC</div>
+      <div class="hdr-logo-txt">
+        <div class="hdr-logo-name">Chef<span>Controller</span></div>
+        <div class="hdr-logo-sub">Ejecutivo</div>
+      </div>
+    </div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-periodo">
+      <button class="hdr-nav-btn" onclick="execCambiarMes(-1)">&lsaquo;</button>
+      <div class="hdr-mes-lbl" id="execHdrMes">—</div>
+      <button class="hdr-nav-btn" onclick="execCambiarMes(1)">&rsaquo;</button>
+    </div>
+    <div class="hdr-right">
+      <button class="btn-logout-h" onclick="logout()">Salir</button>
+    </div>
+  </div>
+  <div class="dash-layout">
+    <div class="sb-overlay hidden" id="sbOverlayE" onclick="closeSidebar()"></div>
+    <nav class="sidebar" id="sidebarE">
+      <div class="sb-section">Navegación</div>
+      <button class="sb-item" id="sbExecBtn2" onclick="showExecView()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+        Vista ejecutiva
+      </button>
+      <button class="sb-item" id="sbOperBtn2" onclick="showOperView()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Vista operativa
+      </button>
+      <div class="sb-section">Sistema</div>
+      <button class="sb-item" onclick="irACarga()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Ir al formulario
+      </button>
+      <div class="sb-bottom">
+        <div class="sb-user" id="sbUserE"></div>
+        <button class="btn-ir-carga" onclick="irACarga()">&#8592; Formulario</button>
+      </div>
+    </nav>
+    <main class="dash-main">
+    <div class="dash-body">
+      <div id="execBody"><div class="spwrap"><div class="spinner"></div> Cargando...</div></div>
+      <div style="height:40px"></div>
+    </div>
+    </main>
+  </div>
+</div>
+</div>
+
 <!-- PANEL METRICAS -->
 <div class="met-overlay" id="metOverlay" onclick="toggleMet()"></div>
 <div class="met-panel" id="metPanel">
@@ -521,7 +618,7 @@ async function init(){
   const{data:usr}=await sb.from('usuarios').select('*,usuario_local(local_id,locales(id,nombre,codigo))').eq('email',userEmail).single();
   if(usr){
     userRol=usr.rol;grupoId=usr.grupo_id||'';
-    if(!['supervisor','dueno','admin'].includes(userRol)){
+    if(!['supervisor','owner','admin'].includes(userRol)){
       await sb.auth.signOut();
       document.getElementById('lErr').textContent='Sin acceso al dashboard. Ir al formulario de carga.';
       document.getElementById('lErr').classList.remove('hidden');
@@ -539,11 +636,22 @@ async function init(){
   }
   localesActivos=new Set(todosLocales.map(l=>l.id));
   set('sbUser',userEmail+'\n'+userRol);
+  set('sbUserE',userEmail+'\n'+userRol);
   renderPastillas();
+  // Mostrar botones de alternancia solo para admin
+  if(userRol==='admin'){
+    document.getElementById('sbExecBtn').classList.remove('hidden');
+    document.getElementById('sbOperBtn').classList.remove('hidden');
+  }
   document.getElementById('ldOverlay').classList.add('fade');
   setTimeout(()=>document.getElementById('ldOverlay').remove(),350);
-  show('sDash');
-  await loadDash();
+  // Owner ve solo la vista ejecutiva; admin y supervisor ven la operativa
+  if(userRol==='owner'){
+    showExecView();
+  } else {
+    show('sDash');
+    await loadDash();
+  }
 }
 
 async function logout(){await sb.auth.signOut();location.reload();}
@@ -1011,8 +1119,194 @@ function renderCompras(movs,cierres){
 }
 
 /* UI */
-function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sbOverlay');sb.classList.toggle('open');ov.classList.toggle('hidden');}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.add('hidden');}
+/* ── VISTA EJECUTIVA ─────────────────────────────────── */
+let execMesYear=new Date().getFullYear(),execMesMonth=new Date().getMonth();
+
+const LC_EXEC=['#2F6FED','#059669','#D97706','#7C3AED','#DC2626','#0891B2'];
+
+function showExecView(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sDash').style.display='none';
+  document.getElementById('sExecView').style.display='block';
+  document.getElementById('sbExecBtn2').classList.add('active');
+  document.getElementById('sbOperBtn2').classList.remove('active');
+  loadExecDash();
+}
+function showOperView(){
+  document.getElementById('sExecView').style.display='none';
+  document.getElementById('sDash').style.display='';
+  document.getElementById('sDash').classList.add('active');
+  document.getElementById('sbExecBtn2').classList.remove('active');
+  document.getElementById('sbOperBtn2').classList.add('active');
+  loadDash();
+}
+async function execCambiarMes(dir){
+  execMesMonth+=dir;
+  if(execMesMonth<0){execMesMonth=11;execMesYear--;}
+  if(execMesMonth>11){execMesMonth=0;execMesYear++;}
+  await loadExecDash();
+}
+
+async function loadExecDash(){
+  set('execHdrMes',MESES[execMesMonth]+' '+execMesYear);
+  const body=document.getElementById('execBody');
+  body.innerHTML='<div class="spwrap"><div class="spinner"></div> Cargando...</div>';
+
+  const desde=`${execMesYear}-${String(execMesMonth+1).padStart(2,'0')}-01`;
+  const hasta=new Date(execMesYear,execMesMonth+1,0).toISOString().split('T')[0];
+  const ids=todosLocales.map(l=>l.id);
+  if(!ids.length){body.innerHTML='<div class="empty">Sin locales asignados</div>';return;}
+
+  // Traer todos los turnos con cierres y movimientos del mes
+  const{data:turnos}=await sb.from('turnos')
+    .select('*,cierres_turno(*)')
+    .in('local_id',ids)
+    .gte('fecha',desde).lte('fecha',hasta)
+    .order('fecha').order('numero_turno');
+  const todos=turnos||[];
+  todos.forEach(t=>{
+    if(t.cierres_turno&&!Array.isArray(t.cierres_turno))t.cierres_turno=[t.cierres_turno];
+    else if(!t.cierres_turno)t.cierres_turno=[];
+  });
+
+  const tids=todos.map(t=>t.id);
+  let movs=[];
+  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,origen').in('turno_id',tids);movs=m||[];}
+
+  const comprasPorTurno={};
+  movs.filter(m=>m.tipo==='compra').forEach(m=>{comprasPorTurno[m.turno_id]=(comprasPorTurno[m.turno_id]||0)+(m.monto||0);});
+
+  // Agrupar por local
+  const porLocal={};
+  ids.forEach(id=>{porLocal[id]={venta:0,cubiertos:0,compras:0,diffArq:0,abiertos:0,cerrados:0};});
+  todos.forEach(t=>{
+    const r=porLocal[t.local_id];if(!r)return;
+    const c=t.cierres_turno?.[0];
+    if(t.estado==='cerrado'&&c){
+      r.venta+=(c.venta_total||0);
+      r.cubiertos+=(c.cubiertos||0);
+      r.diffArq+=((c.efectivo_real||0)-(c.efectivo_esperado||0));
+      r.compras+=(comprasPorTurno[t.id]||0);
+      r.cerrados++;
+    } else {
+      r.abiertos++;
+    }
+  });
+
+  // KPIs consolidados
+  const totalVenta=ids.reduce((a,id)=>a+(porLocal[id]?.venta||0),0);
+  const totalCub=ids.reduce((a,id)=>a+(porLocal[id]?.cubiertos||0),0);
+  const totalComp=ids.reduce((a,id)=>a+(porLocal[id]?.compras||0),0);
+  const totalDiff=ids.reduce((a,id)=>a+(porLocal[id]?.diffArq||0),0);
+  const tktProm=totalCub>0?totalVenta/totalCub:0;
+  const foodPct=totalVenta>0?totalComp/totalVenta*100:0;
+
+  // Ranking locales por venta
+  const ranking=todosLocales
+    .map(l=>({...l,...(porLocal[l.id]||{})}))
+    .sort((a,b)=>b.venta-a.venta);
+  const maxVenta=ranking[0]?.venta||1;
+
+  // Render
+  body.innerHTML=`
+    <!-- KPIs consolidados -->
+    <div class="exec-kpi-grid">
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Venta total grupo</div>
+        <div class="exec-kpi-val">${fmt(totalVenta)}</div>
+        <div class="exec-kpi-sub">${MESES[execMesMonth]} ${execMesYear}</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Cubiertos</div>
+        <div class="exec-kpi-val">${fmtN(totalCub)}</div>
+        <div class="exec-kpi-sub">Ticket prom. ${tktProm>0?fmt(tktProm):'—'}</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Compras / Foodcost</div>
+        <div class="exec-kpi-val" style="color:${foodPct>28?'var(--err)':foodPct>20?'var(--warn)':'var(--ok)'}">${foodPct.toFixed(1)}%</div>
+        <div class="exec-kpi-sub">${fmt(totalComp)} en compras</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Diferencia arq. acum.</div>
+        <div class="exec-kpi-val" style="color:${Math.abs(totalDiff)<500?'var(--ok)':Math.abs(totalDiff)<3000?'var(--warn)':'var(--err)'}">${totalDiff>=0?'+':''}${fmt(totalDiff)}</div>
+        <div class="exec-kpi-sub">${ids.reduce((a,id)=>a+(porLocal[id]?.abiertos||0),0)} turno(s) abierto(s)</div>
+      </div>
+    </div>
+
+    <!-- Ranking locales -->
+    <div class="panel exec-ranking">
+      <div class="panel-head">
+        <div class="panel-title">Ranking por venta</div>
+        <div class="panel-sub">${MESES[execMesMonth]}</div>
+      </div>
+      ${ranking.map((l,i)=>{
+        const pct=maxVenta>0?l.venta/maxVenta*100:0;
+        const color=LC_EXEC[i%LC_EXEC.length];
+        const pctGrupo=totalVenta>0?l.venta/totalVenta*100:0;
+        return`<div class="exec-rank-row">
+          <div class="exec-rank-pos">${i+1}</div>
+          <div class="exec-rank-nombre" title="${l.nombre}">${l.nombre}</div>
+          <div class="exec-rank-bar-wrap"><div class="exec-rank-bar" style="width:${pct}%;background:${color}"></div></div>
+          <div class="exec-rank-monto">${l.venta>0?fmt(l.venta):'—'}</div>
+          <div class="exec-rank-pct">${l.venta>0?pctGrupo.toFixed(0)+'%':'—'}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- Semáforo por local -->
+    <div class="panel exec-semaforo">
+      <div class="panel-head">
+        <div class="panel-title">Estado operativo por local</div>
+        <div class="panel-sub">Foodcost · Diferencia de arqueo · Turnos</div>
+      </div>
+      <table class="exec-sem-table">
+        <thead>
+          <tr>
+            <th>Local</th>
+            <th>Foodcost</th>
+            <th>Dif. arqueo</th>
+            <th>Turnos cerrados</th>
+            <th>Abiertos</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranking.map(l=>{
+            const fc=l.venta>0?l.compras/l.venta*100:0;
+            const fcClass=fc>28?'exec-pill-err':fc>20?'exec-pill-warn':l.cerrados>0?'exec-pill-ok':'exec-pill-neu';
+            const fcTxt=l.cerrados>0?fc.toFixed(1)+'%':'—';
+            const dClass=Math.abs(l.diffArq)<500?'exec-pill-ok':Math.abs(l.diffArq)<3000?'exec-pill-warn':'exec-pill-err';
+            const dTxt=l.cerrados>0?(l.diffArq>=0?'+':'')+fmt(l.diffArq):'—';
+            const abClass=l.abiertos>0?'exec-pill-warn':'exec-pill-neu';
+            return`<tr>
+              <td>${l.nombre}</td>
+              <td><span class="exec-pill ${fcClass}"><span class="exec-dot ${fcClass.replace('exec-pill-','exec-dot-')}"></span>${fcTxt}</span></td>
+              <td><span class="exec-pill ${l.cerrados>0?dClass:'exec-pill-neu'}">${dTxt}</span></td>
+              <td style="color:var(--t2)">${l.cerrados}</td>
+              <td><span class="exec-pill ${abClass}">${l.abiertos>0?l.abiertos+' abierto(s)':'—'}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const sbE=document.getElementById('sidebarE');
+  const ov=document.getElementById('sbOverlay');
+  const ovE=document.getElementById('sbOverlayE');
+  const isExec=document.getElementById('sExecView').style.display!=='none';
+  if(isExec){sbE.classList.toggle('open');ovE.classList.toggle('hidden');}
+  else{sb.classList.toggle('open');ov.classList.toggle('hidden');}
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarE').classList.remove('open');
+  document.getElementById('sbOverlay').classList.add('hidden');
+  document.getElementById('sbOverlayE').classList.add('hidden');
+}
+
 function scrollToTop(){window.scrollTo(0,0);closeSidebar();}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeSidebar();}
 
