@@ -4,7 +4,7 @@
 const CC_CONFIG = {
   supabase: {
     url:     'https://fvlkmxqfqmzbmoofmzcb.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bGtteHFmcW16Ym1vb2ZtemNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQwMTcsImV4cCI6MjA5Mzc0MDAxN30._zZKCMsREtsIdCbKl86JGaKCcWqHHs3dKRKGjW8cRXg'
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bGtteHFmcW16Ym1vb2ZtemNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQwMTcsImV4cCI6MjA5Mzc0MDAxN30._zZKCMsREtsIdCbKl86JGaKCcWqHHs3dKRKGjM8cRXg'
   },
   grupos: {
     default: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
