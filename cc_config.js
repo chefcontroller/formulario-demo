@@ -1,21 +1,21 @@
-// cc_config.js — ChefController
-// Credenciales y constantes globales
-// ⚠️  No exponer este archivo en repositorios públicos
+// cc_config.js — ChefController DEMO
+// ⚠️  Ambiente DEMO — NO usar en producción
 
 const CC_CONFIG = {
   supabase: {
-    url: 'https://uxbqjswzhbvdiorwqhes.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4YnFqc3d6aGJ2ZGlvcndxaGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTI0MzEsImV4cCI6MjA5Mjg4ODQzMX0.bCqdR-yccahVZy1n_9d9MZxmtrV9mXo-rm6iA893xiQ'
+    url:     'https://fvlkmxqfqmzbmoofmzcb.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bGtteHFmcW16Ym1vb2ZtemNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQwMTcsImV4cCI6MjA5Mzc0MDAxN30._zZKCMsREtsIdCbKl86JGaKCcWqHHs3dKRKGjW8cRXg'
   },
   grupos: {
-    default: '11111111-1111-1111-1111-111111111111'
+    default: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
   },
   locales: {
-    IKI_LIB: {
-      id: 'ac38ec53-1f55-4404-959d-023afeafb692',
-      codigo: 'IKI-LIB',
-      nombre: 'IKI Libertador'
-    }
+    CDS_REC: { id: '00000000-0000-0000-0000-000000000001', codigo: 'CDS-REC', nombre: 'Café del Sur Recoleta'  },
+    CDS_CAB: { id: '00000000-0000-0000-0000-000000000002', codigo: 'CDS-CAB', nombre: 'Café del Sur Caballito' },
+    CDS_SIS: { id: '00000000-0000-0000-0000-000000000003', codigo: 'CDS-SIS', nombre: 'Café del Sur San Isidro'},
+    TOS_PAL: { id: '00000000-0000-0000-0000-000000000004', codigo: 'TOS-PAL', nombre: 'Tostado Palermo'        },
+    KEN_ZNO: { id: '00000000-0000-0000-0000-000000000005', codigo: 'KEN-ZNO', nombre: 'Kentucky Zona Norte'    },
+    BAR_PAL: { id: '00000000-0000-0000-0000-000000000006', codigo: 'BAR-PAL', nombre: 'Bar del Centro Palermo' }
   },
   colores: {
     primary: '#2F6FED',
