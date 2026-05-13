@@ -103,6 +103,12 @@ async function init() {
   //   document.querySelectorAll('.shopping-only').forEach(el => el.classList.remove('hidden'));
   // }
 
+  // Owner no opera el formulario — va directo al dashboard
+  if (window.userRol === 'owner') {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
   // Cargar datos iniciales
   await loadProveedores(); // cc_proveedores.js
   await loadTurnos();      // cc_turnos.js
