@@ -239,33 +239,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 /* SIDEBAR OVERLAY MOBILE */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90}
 
-/* 09C — TABS DE VISTA EN HEADER */
-.vista-tabs{display:flex;gap:4px}
-.vista-tab{background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.8);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
-.vista-tab.active{background:#fff;color:var(--pd);font-weight:600}
-.vista-tab:hover:not(.active){background:rgba(255,255,255,.28);color:#fff}
-
-/* 09C — SEMÁFORO CON TOOLTIP */
-.sf{display:inline-block;font-size:14px;cursor:default;position:relative}
-.sf::after{content:attr(data-label);display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--t);color:#fff;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:500;white-space:nowrap;pointer-events:none;z-index:10}
-.sf:hover::after{display:block}
-
-/* 09C — LOCALES STICKY */
-.locales-sticky{position:sticky;top:54px;z-index:40;background:var(--s);border-bottom:1px solid var(--b);padding:8px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-
-/* 09C — VISTA FINANCIERA */
-.fin-disclaimer{font-size:11px;color:var(--t2);background:var(--warn-bg);border:1px solid var(--warn);border-radius:var(--rs);padding:8px 12px;margin-bottom:14px}
-.fin-bloque{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.fin-bloque-head{padding:10px 16px;border-bottom:1px solid var(--b);background:var(--bg);font-size:12px;font-weight:600;color:var(--t);display:flex;align-items:center;justify-content:space-between}
-.fin-bloque-body{padding:14px 16px}
-.fin-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--b);font-size:13px}
-.fin-row:last-child{border-bottom:none}
-.fin-row-lbl{color:var(--t2)}
-.fin-row-val{font-weight:500;color:var(--t)}
-.fin-row.total{font-weight:600;color:var(--pd);font-size:14px;padding-top:10px;border-top:1.5px solid rgba(47,111,237,.2)}
-.fin-row.negativo .fin-row-val{color:var(--err)}
-.fin-row.positivo .fin-row-val{color:var(--ok)}
-
 /* SPINNER */
 .spwrap{display:flex;align-items:center;justify-content:center;padding:28px;color:var(--t3);font-size:12px;gap:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -341,8 +314,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         <div class="hdr-logo-sub">Operativo</div>
       </div>
     </div>
-    <!-- 09C-0: Badge entorno DEMO — siempre visible -->
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-sep"></div>
     <div class="hdr-disponible">
       <div class="hdr-disponible-lbl">Disponible real</div>
@@ -362,13 +333,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
           <div id="bellList"></div>
         </div>
       </div>
-      <button class="btn-metricas" onclick="toggleMet()">&#9881; <span>Ver métricas</span></button>
-      <!-- 09C: tabs de vista — solo visibles para admin -->
-      <div class="vista-tabs" id="vistaTabsOper" style="display:none">
-        <button class="vista-tab" onclick="showExecView()">Ejecutiva</button>
-        <button class="vista-tab active" onclick="showOperView()">Operativa</button>
-        <button class="vista-tab" onclick="showFinView()">Financiera</button>
-      </div>
+      <button class="btn-metricas" onclick="toggleMet()">&#9881; Ver métricas</button>
       <button class="btn-logout-h" onclick="logout()">Salir</button>
     </div>
   </div>
@@ -402,10 +367,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Vista operativa
       </button>
-      <button class="sb-item" onclick="irACarga()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Ir al formulario
-      </button>
       <div class="sb-bottom">
         <div class="sb-user" id="sbUser"></div>
         <button class="btn-ir-carga" onclick="irACarga()">&#8592; Formulario de carga</button>
@@ -413,11 +374,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
     </nav>
 
     <main class="dash-main">
-
-      <!-- 09C: selector locales sticky -->
-      <div class="locales-sticky" id="localesBar"><span class="locales-lbl">Locales:</span></div>
-
     <div class="dash-body">
+
+      <div class="locales-bar" id="localesBar"><span class="locales-lbl">Locales:</span></div>
 
       <!-- KPIs -->
       <div class="kpi-grid" id="kpiGrid"></div>
@@ -527,20 +486,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
       </div>
     </div>
     <div class="hdr-sep"></div>
-    <!-- 09C-0: Badge DEMO -->
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-periodo">
       <button class="hdr-nav-btn" onclick="execCambiarMes(-1)">&lsaquo;</button>
       <div class="hdr-mes-lbl" id="execHdrMes">—</div>
       <button class="hdr-nav-btn" onclick="execCambiarMes(1)">&rsaquo;</button>
     </div>
     <div class="hdr-right">
-      <!-- 09C: tabs de vista — solo para admin -->
-      <div class="vista-tabs" id="vistaTabsExec" style="display:none">
-        <button class="vista-tab active" onclick="showExecView()">Ejecutiva</button>
-        <button class="vista-tab" onclick="showOperView()">Operativa</button>
-        <button class="vista-tab" onclick="showFinView()">Financiera</button>
-      </div>
       <button class="btn-logout-h" onclick="logout()">Salir</button>
     </div>
   </div>
@@ -560,115 +511,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         Vista financiera
       </button>
-      <div class="sb-section">Sistema</div>
-      <button class="sb-item" id="sbIrCargaE" onclick="irACarga()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Ir al formulario
-      </button>
       <div class="sb-bottom">
         <div class="sb-user" id="sbUserE"></div>
         <button class="btn-ir-carga" id="btnIrCargaE" onclick="irACarga()">&#8592; Formulario</button>
       </div>
     </nav>
     <main class="dash-main">
-      <!-- 09C: selector locales sticky ejecutiva -->
       <div class="locales-sticky" id="localesBarExec"><span class="locales-lbl">Locales:</span></div>
     <div class="dash-body">
       <div id="execBody"><div class="spwrap"><div class="spinner"></div> Cargando...</div></div>
       <div style="height:40px"></div>
     </div>
-    </main>
-  </div>
-</div>
-</div>
-
-<!-- VISTA FINANCIERA — 09C -->
-<div id="sFinView" style="display:none">
-<div class="dash-root">
-  <div class="dash-hdr">
-    <button class="hdr-hamburger" onclick="toggleSidebar()">&#9776;</button>
-    <div class="hdr-logo">
-      <div class="hdr-logo-mark">CC</div>
-      <div class="hdr-logo-txt">
-        <div class="hdr-logo-name">Chef<span>Controller</span></div>
-        <div class="hdr-logo-sub">Financiero</div>
-      </div>
-    </div>
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
-    <div class="hdr-sep"></div>
-    <div class="hdr-periodo">
-      <button class="hdr-nav-btn" onclick="finCambiarMes(-1)">&lsaquo;</button>
-      <div class="hdr-mes-lbl" id="finHdrMes">—</div>
-      <button class="hdr-nav-btn" onclick="finCambiarMes(1)">&rsaquo;</button>
-    </div>
-    <div class="hdr-right">
-      <div class="vista-tabs" id="vistaTabsFin" style="display:none">
-        <button class="vista-tab" onclick="showExecView()">Ejecutiva</button>
-        <button class="vista-tab" onclick="showOperView()">Operativa</button>
-        <button class="vista-tab active" onclick="showFinView()">Financiera</button>
-      </div>
-      <button class="btn-logout-h" onclick="logout()">Salir</button>
-    </div>
-  </div>
-  <div class="dash-layout">
-    <div class="sb-overlay hidden" id="sbOverlayF" onclick="closeSidebar()"></div>
-    <nav class="sidebar" id="sidebarF">
-      <div class="sb-section">Navegación</div>
-      <button class="sb-item" onclick="showExecView()">Vista ejecutiva</button>
-      <button class="sb-item" onclick="showOperView()">Vista operativa</button>
-      <button class="sb-item active" onclick="showFinView()">Vista financiera</button>
-      <div class="sb-bottom">
-        <div class="sb-user" id="sbUserF"></div>
-      </div>
-    </nav>
-    <main class="dash-main">
-      <!-- 09C: locales sticky en vista financiera -->
-      <div class="locales-sticky" id="localesBarFin"><span class="locales-lbl">Locales:</span></div>
-      <div class="dash-body">
-        <div class="fin-disclaimer">
-          ⚠️ <strong>Resultado operativo estimado</strong> — calculado según movimientos cargados. No reemplaza cierre contable. No incluye impuestos definitivos ni amortizaciones.
-        </div>
-        <!-- Bloque 1 — Resumen -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head">Resumen financiero <span style="font-size:11px;font-weight:400;color:var(--t3)" id="finMesLbl"></span></div>
-          <div class="fin-bloque-body" id="finResumen"><div class="spwrap"><div class="spinner"></div></div></div>
-        </div>
-        <!-- Bloque 3 — Compras / IVA -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head">Compras <span style="font-size:11px;font-weight:400;color:var(--t3)">neto · IVA · total factura</span></div>
-          <div class="fin-bloque-body" id="finCompras"><div class="spwrap"><div class="spinner"></div></div></div>
-        </div>
-        <!-- Bloque 4 — Egresos -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head">Egresos operativos</div>
-          <div class="fin-bloque-body" id="finEgresos"><div class="spwrap"><div class="spinner"></div></div></div>
-        </div>
-        <!-- Bloque 5 — Costos fijos -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head">Costos fijos del período</div>
-          <div class="fin-bloque-body" id="finCostosFijos"><div class="spwrap"><div class="spinner"></div></div></div>
-        </div>
-        <!-- Bloque 6 — P&L -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head" style="background:rgba(47,111,237,.05)">P&L operativo estimado</div>
-          <div class="fin-bloque-body" id="finPL"><div class="spwrap"><div class="spinner"></div></div></div>
-        </div>
-        <!-- Bloque 7 — Benchmarks -->
-        <div class="fin-bloque">
-          <div class="fin-bloque-head">Benchmarks — gastronomía argentina 2026</div>
-          <div class="fin-bloque-body">
-            <div class="fin-row"><span class="fin-row-lbl">CMV / Foodcost referencia</span><span class="fin-row-val">35-40%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Sueldos / RRHH referencia</span><span class="fin-row-val">25-28%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Alquiler referencia</span><span class="fin-row-val">8-9%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Gastos bancarios referencia</span><span class="fin-row-val">6-7%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Margen bueno referencia (2024)</span><span class="fin-row-val" style="color:var(--ok)">13%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Margen mínimo verde</span><span class="fin-row-val" style="color:var(--ok)">≥ 8%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Margen alerta amarillo</span><span class="fin-row-val" style="color:var(--warn)">4-8%</span></div>
-            <div class="fin-row"><span class="fin-row-lbl">Margen crítico rojo</span><span class="fin-row-val" style="color:var(--err)">&lt; 4%</span></div>
-          </div>
-        </div>
-        <div style="height:40px"></div>
-      </div>
     </main>
   </div>
 </div>
@@ -703,43 +556,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 </div>
 
 <script>
-// ============================================================
-// 09C-0 — ENVIRONMENT GUARD
-// Archivo: dashboard_demo.html
-// Entorno: DEMO — Supabase fvlkmxqfqmzbmoofmzcb
-// NO modificar SB_URL ni SB_KEY sin verificar el entorno
-// ============================================================
-const CC_ENV = 'DEMO';
-const CC_DEMO_LOCALES = ['café del sur','kentucky','tostado','bar del centro','bar centro'];
-const CC_PROD_LOCALES_PROHIBIDOS = ['iki','tradition','nando','mahi','adorado','guapaletas'];
-const CC_PROD_PROJECT = 'uxbqjswzhbvdiorwqhes'; // NUNCA debe aparecer en demo
-
-const SB_URL='https://fvlkmxqfqmzbmoofmzcb.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bGtteHFmcW16Ym1vb2ZtemNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQwMTcsImV4cCI6MjA5Mzc0MDAxN30._zZKCMsREtsIdCbKl86JGaKCcWqHHs3dKRKGjM8cRXg';
+const SB_URL='https://uxbqjswzhbvdiorwqhes.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4YnFqc3d6aGJ2ZGlvcndxaGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTI0MzEsImV4cCI6MjA5Mjg4ODQzMX0.bCqdR-yccahVZy1n_9d9MZxmtrV9mXo-rm6iA893xiQ';
 const{createClient}=supabase;
 const sb=createClient(SB_URL,SB_KEY);
-
-// Validación de entorno — se ejecuta al cargar locales
-function validarEntorno(locales){
-  if(!locales||!locales.length) return true;
-  const nombres=locales.map(l=>l.nombre.toLowerCase());
-  if(CC_ENV==='DEMO'){
-    const hayProd=nombres.some(n=>CC_PROD_LOCALES_PROHIBIDOS.some(p=>n.includes(p)));
-    if(hayProd){
-      document.body.innerHTML=`
-        <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#FFF1F2;font-family:Inter,sans-serif">
-          <div style="text-align:center;padding:32px;max-width:420px">
-            <div style="font-size:40px;margin-bottom:16px">🚨</div>
-            <div style="font-size:18px;font-weight:700;color:#E5484D;margin-bottom:8px">Error de entorno</div>
-            <div style="font-size:14px;color:#6B7280;line-height:1.6">Este dashboard DEMO está conectado a datos de producción.<br><br>Verificá las credenciales de Supabase (SB_URL / SB_KEY).</div>
-            <div style="margin-top:16px;font-size:11px;color:#9CA3AF;background:#F5F6F8;padding:8px 12px;border-radius:8px">CC_ENV: ${CC_ENV} · Project detectado: producción</div>
-          </div>
-        </div>`;
-      return false;
-    }
-  }
-  return true;
-}
 
 const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -752,8 +572,7 @@ const fechaHoy=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getM
 const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
 const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');};
 
-// 09C-0: Default abril 2026 — último mes con datos en demo
-let mesYear=2026,mesMonth=3;
+let mesYear=new Date().getFullYear(),mesMonth=new Date().getMonth();
 let userRol='',grupoId='',userEmail='';
 let todosLocales=[],localesActivos=new Set();
 let turnoLocalMap={};
@@ -812,25 +631,13 @@ async function init(){
     todosLocales=locs||[];
   }
   localesActivos=new Set(todosLocales.map(l=>l.id));
-  // 09C-0: validar que los locales corresponden al entorno correcto
-  if(!validarEntorno(todosLocales)) return;
   set('sbUser',userEmail+'\n'+userRol);
   set('sbUserE',userEmail+'\n'+userRol);
   renderPastillas();
-  // Mostrar botones de alternancia para admin Y owner
-  if(userRol==='admin'||userRol==='owner'){
+  // Mostrar botones de alternancia solo para admin
+  if(userRol==='admin'){
     document.getElementById('sbExecBtn').classList.remove('hidden');
     document.getElementById('sbOperBtn').classList.remove('hidden');
-    // 09C: mostrar tabs en todas las vistas
-    ['vistaTabsOper','vistaTabsExec','vistaTabsFin'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.style.display='flex';
-    });
-    // Mostrar botón financiera en sidebar ejecutiva
-    const fb=document.getElementById('sbFinBtn2');if(fb)fb.style.display='';
-  }
-  // 09C: owner no ve botón de formulario
-  if(userRol==='owner'){
-    ['sbIrCargaE','btnIrCargaE'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   }
   document.getElementById('ldOverlay').classList.add('fade');
   setTimeout(()=>document.getElementById('ldOverlay').remove(),350);
@@ -854,41 +661,25 @@ async function cambiarMes(dir){
 }
 
 function renderPastillas(){
-  // 09C: actualizar los 3 selectores de locales (oper, exec, fin)
-  ['localesBar','localesBarExec','localesBarFin'].forEach(barId=>{
-    const bar=document.getElementById(barId);
-    if(!bar) return;
-    bar.innerHTML='<span class="locales-lbl">Locales:</span>';
-    const bt=document.createElement('button');
-    bt.className='local-pill pill-all'+(localesActivos.size===todosLocales.length?' active':'');
-    bt.textContent='Todos';
-    bt.onclick=()=>{toggleTodos();};
-    bar.appendChild(bt);
-    todosLocales.forEach((loc,i)=>{
-      const p=document.createElement('button');
-      p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
-      const nombre=loc.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
-      p.textContent=nombre;p.title=loc.nombre;
-      p.onclick=()=>toggleLocal(loc.id);
-      bar.appendChild(p);
-    });
+  const bar=document.getElementById('localesBar');
+  bar.innerHTML='<span class="locales-lbl">Locales:</span>';
+  const bt=document.createElement('button');
+  bt.className='local-pill pill-all'+(localesActivos.size===todosLocales.length?' active':'');
+  bt.textContent='Todos';bt.onclick=toggleTodos;bar.appendChild(bt);
+  todosLocales.forEach((loc,i)=>{
+    const p=document.createElement('button');
+    p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
+    p.textContent=loc.nombre;p.onclick=()=>toggleLocal(loc.id);bar.appendChild(p);
   });
 }
 function toggleLocal(id){
   if(localesActivos.has(id)){if(localesActivos.size===1)return;localesActivos.delete(id);}
   else localesActivos.add(id);
-  renderPastillas();
-  // 09C: recargar la vista activa según cuál está visible
-  if(document.getElementById('sFinView')?.style.display!=='none') renderVistaFin();
-  else if(document.getElementById('sExecView')?.style.display!=='none') loadExecDash();
-  else loadDash();
+  renderPastillas();loadDash();
 }
 function toggleTodos(){
   localesActivos=localesActivos.size===todosLocales.length?new Set([todosLocales[0].id]):new Set(todosLocales.map(l=>l.id));
-  renderPastillas();
-  if(document.getElementById('sFinView')?.style.display!=='none') renderVistaFin();
-  else if(document.getElementById('sExecView')?.style.display!=='none') loadExecDash();
-  else loadDash();
+  renderPastillas();loadDash();
 }
 
 async function loadDash(){
@@ -1325,8 +1116,7 @@ function renderCompras(movs,cierres){
 
 /* UI */
 /* ── VISTA EJECUTIVA ─────────────────────────────────── */
-// 09C-0: Default abril 2026 — último mes con datos en demo
-let execMesYear=2026,execMesMonth=3;
+let execMesYear=new Date().getFullYear(),execMesMonth=new Date().getMonth();
 
 const LC_EXEC=['#2F6FED','#059669','#D97706','#7C3AED','#DC2626','#0891B2'];
 
@@ -1334,146 +1124,18 @@ function showExecView(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('sDash').style.display='none';
   document.getElementById('sExecView').style.display='block';
-  document.getElementById('sFinView').style.display='none';
   document.getElementById('sbExecBtn2').classList.add('active');
   document.getElementById('sbOperBtn2').classList.remove('active');
   loadExecDash();
 }
 function showOperView(){
   document.getElementById('sExecView').style.display='none';
-  document.getElementById('sFinView').style.display='none';
   document.getElementById('sDash').style.display='';
   document.getElementById('sDash').classList.add('active');
   document.getElementById('sbExecBtn2').classList.remove('active');
   document.getElementById('sbOperBtn2').classList.add('active');
   loadDash();
 }
-
-// 09C — Vista Financiera
-let finMesYear=2026, finMesMonth=3;
-function showFinView(){
-  document.getElementById('sExecView').style.display='none';
-  document.getElementById('sDash').style.display='none';
-  document.getElementById('sDash').classList.remove('active');
-  document.getElementById('sFinView').style.display='block';
-  set('finHdrMes', MESES[finMesMonth]+' '+finMesYear);
-  set('finMesLbl', MESES[finMesMonth]+' '+finMesYear);
-  // Sincronizar pills de locales en vista financiera
-  renderPastillasFin();
-  renderVistaFin();
-}
-async function finCambiarMes(dir){
-  finMesMonth+=dir;
-  if(finMesMonth<0){finMesMonth=11;finMesYear--;}
-  if(finMesMonth>11){finMesMonth=0;finMesYear++;}
-  set('finHdrMes', MESES[finMesMonth]+' '+finMesYear);
-  set('finMesLbl', MESES[finMesMonth]+' '+finMesYear);
-  await renderVistaFin();
-}
-function renderPastillasFin(){
-  const bar=document.getElementById('localesBarFin');
-  if(!bar) return;
-  bar.innerHTML='<span class="locales-lbl">Locales:</span>';
-  const bt=document.createElement('button');
-  bt.className='local-pill pill-all'+(localesActivos.size===todosLocales.length?' active':'');
-  bt.textContent='Todos';bt.onclick=()=>{localesActivos=new Set(todosLocales.map(l=>l.id));renderPastillasFin();renderVistaFin();};
-  bar.appendChild(bt);
-  todosLocales.forEach((loc,i)=>{
-    const p=document.createElement('button');
-    p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
-    const nombre=loc.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
-    p.textContent=nombre;p.title=loc.nombre;
-    p.onclick=()=>{
-      if(localesActivos.has(loc.id)){if(localesActivos.size===1)return;localesActivos.delete(loc.id);}
-      else localesActivos.add(loc.id);
-      renderPastillasFin();renderVistaFin();
-    };
-    bar.appendChild(p);
-  });
-}
-async function renderVistaFin(){
-  const desde=`${finMesYear}-${String(finMesMonth+1).padStart(2,'0')}-01`;
-  const hasta=new Date(finMesYear,finMesMonth+1,0).toISOString().split('T')[0];
-  const ids=[...localesActivos];
-  if(!ids.length) return;
-
-  // Traer datos del mes
-  const{data:turnos}=await sb.from('turnos').select('*,cierres_turno(*)').in('local_id',ids).gte('fecha',desde).lte('fecha',hasta);
-  const todos=turnos||[];
-  todos.forEach(t=>{if(t.cierres_turno&&!Array.isArray(t.cierres_turno))t.cierres_turno=[t.cierres_turno];else if(!t.cierres_turno)t.cierres_turno=[];});
-  const cierres=todos.filter(t=>t.estado==='cerrado').map(t=>t.cierres_turno?.[0]).filter(Boolean);
-  const tids=todos.map(t=>t.id);
-  let movs=[];
-  if(tids.length){const{data:m}=await sb.from('movimientos').select('*').in('turno_id',tids);movs=m||[];}
-
-  // Costos fijos del mes
-  const{data:cf}=await sb.from('costos_fijos').select('concepto,descripcion,monto,local_id').in('local_id',ids).eq('mes',desde);
-  const costosFijos=cf||[];
-
-  const vt=cierres.reduce((a,c)=>a+(c.venta_total||0),0);
-  const compras=movs.filter(m=>m.tipo==='compra');
-  const egresos=movs.filter(m=>m.tipo==='egreso');
-  const compNeto=compras.reduce((a,m)=>a+(m.monto_neto??m.monto??0),0);
-  const compIva=compras.reduce((a,m)=>a+(m.monto_iva??0),0);
-  const compTotal=compras.reduce((a,m)=>a+(m.monto??0),0);
-  const egrTotal=egresos.reduce((a,m)=>a+(m.monto??0),0);
-  const cfTotal=costosFijos.reduce((a,c)=>a+(c.monto||0),0);
-  const resultado=vt-compNeto-egrTotal-cfTotal;
-  const margen=vt>0?resultado/vt*100:0;
-  const semColor=margen>=8?'var(--ok)':margen>=4?'var(--warn)':'var(--err)';
-  const semLabel=margen>=8?'En rango':margen>=4?'Atención':'Crítico';
-  const semIcon=margen>=8?'🟢':margen>=4?'🟡':'🔴';
-
-  // Bloque 1 — Resumen
-  document.getElementById('finResumen').innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
-      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Venta neta</div><div style="font-size:22px;font-weight:700;color:var(--t)">${fmt(vt)}</div></div>
-      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Resultado estimado</div><div style="font-size:22px;font-weight:700;color:${semColor}">${fmt(resultado)}</div></div>
-      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Margen</div><div style="font-size:22px;font-weight:700;color:${semColor}">${margen.toFixed(1)}% <span class="sf" data-label="${semLabel}">${semIcon}</span></div></div>
-    </div>`;
-
-  // Bloque 3 — Compras / IVA
-  document.getElementById('finCompras').innerHTML=`
-    <div class="fin-row"><span class="fin-row-lbl">Compras netas</span><span class="fin-row-val">${fmt(compNeto)}</span></div>
-    <div class="fin-row"><span class="fin-row-lbl">IVA compras</span><span class="fin-row-val" style="color:var(--t3)">${fmt(compIva)}</span></div>
-    <div class="fin-row total"><span class="fin-row-lbl">Total factura</span><span class="fin-row-val">${fmt(compTotal)}</span></div>
-    <div class="fin-row" style="margin-top:8px"><span class="fin-row-lbl">Foodcost sobre neto</span><span class="fin-row-val">${vt>0?(compNeto/vt*100).toFixed(1)+'%':'—'}</span></div>
-    <div class="fin-row"><span class="fin-row-lbl">Foodcost sobre venta total</span><span class="fin-row-val">${vt>0?(compTotal/vt*100).toFixed(1)+'%':'—'}</span></div>`;
-
-  // Bloque 4 — Egresos
-  const egrPorConc={};egresos.forEach(m=>{const k=m.concepto||'Otros';egrPorConc[k]=(egrPorConc[k]||0)+(m.monto||0);});
-  document.getElementById('finEgresos').innerHTML=
-    (Object.keys(egrPorConc).length
-      ? Object.entries(egrPorConc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
-          `<div class="fin-row"><span class="fin-row-lbl" style="text-transform:capitalize">${k}</span><span class="fin-row-val">${fmt(v)}</span></div>`
-        ).join('')
-      : '<div class="empty">Sin egresos operativos este período</div>')
-    +`<div class="fin-row total"><span class="fin-row-lbl">Total egresos</span><span class="fin-row-val">${fmt(egrTotal)}</span></div>`;
-
-  // Bloque 5 — Costos fijos
-  const cfLabels={sueldos:'Sueldos / RRHH',alquiler:'Alquiler',gastos_bancarios:'Gastos bancarios',impuestos:'Impuestos estimados',servicios:'Servicios',descartables:'Descartables',limpieza:'Limpieza',mantenimiento:'Mantenimiento'};
-  const cfPorConc={};costosFijos.forEach(c=>{const k=c.concepto||'otros';cfPorConc[k]=(cfPorConc[k]||0)+(c.monto||0);});
-  document.getElementById('finCostosFijos').innerHTML=
-    (Object.keys(cfPorConc).length
-      ? Object.entries(cfPorConc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
-          `<div class="fin-row"><span class="fin-row-lbl">${cfLabels[k]||k}</span><span class="fin-row-val">${fmt(v)} <span style="font-size:10px;color:var(--t3)">${vt>0?'('+((v/vt)*100).toFixed(1)+'%)':''}</span></span></div>`
-        ).join('')
-      : '<div class="empty">Sin costos fijos cargados para este período</div>')
-    +`<div class="fin-row total"><span class="fin-row-lbl">Total costos fijos</span><span class="fin-row-val">${fmt(cfTotal)}</span></div>`;
-
-  // Bloque 6 — P&L
-  document.getElementById('finPL').innerHTML=`
-    <div class="fin-row positivo"><span class="fin-row-lbl">Venta neta</span><span class="fin-row-val">${fmt(vt)}</span></div>
-    <div class="fin-row negativo"><span class="fin-row-lbl">− Compras netas</span><span class="fin-row-val">− ${fmt(compNeto)}</span></div>
-    <div class="fin-row negativo"><span class="fin-row-lbl">− Egresos operativos</span><span class="fin-row-val">− ${fmt(egrTotal)}</span></div>
-    <div class="fin-row negativo"><span class="fin-row-lbl">− Costos fijos</span><span class="fin-row-val">− ${fmt(cfTotal)}</span></div>
-    <div class="fin-row total ${resultado>=0?'positivo':'negativo'}">
-      <span class="fin-row-lbl">= Resultado operativo estimado</span>
-      <span class="fin-row-val" style="font-size:18px;color:${semColor}">${fmt(resultado)} <span class="sf" data-label="${semLabel}">${semIcon}</span></span>
-    </div>
-    <div style="font-size:11px;color:var(--t3);margin-top:10px">Margen: ${margen.toFixed(1)}% sobre venta · ${semIcon} ${semLabel}</div>
-    <div style="font-size:10px;color:var(--t3);margin-top:4px">No incluye impuestos definitivos, amortizaciones ni pasivos.</div>`;
-}// fin renderVistaFin
 async function execCambiarMes(dir){
   execMesMonth+=dir;
   if(execMesMonth<0){execMesMonth=11;execMesYear--;}
@@ -1491,7 +1153,6 @@ async function loadExecDash(){
   const ids=todosLocales.map(l=>l.id);
   if(!ids.length){body.innerHTML='<div class="empty">Sin locales asignados</div>';return;}
 
-  // Traer todos los turnos con cierres y movimientos del mes
   const{data:turnos}=await sb.from('turnos')
     .select('*,cierres_turno(*)')
     .in('local_id',ids)
@@ -1505,125 +1166,159 @@ async function loadExecDash(){
 
   const tids=todos.map(t=>t.id);
   let movs=[];
-  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,origen').in('turno_id',tids);movs=m||[];}
+  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,origen,concepto').in('turno_id',tids);movs=m||[];}
 
-  const comprasPorTurno={};
-  movs.filter(m=>m.tipo==='compra').forEach(m=>{comprasPorTurno[m.turno_id]=(comprasPorTurno[m.turno_id]||0)+(m.monto||0);});
+  // Costos fijos del mes para P&L estimado
+  const{data:cf}=await sb.from('costos_fijos').select('monto,local_id').in('local_id',ids).eq('mes',desde);
+  const costosFijos=cf||[];
 
   // Agrupar por local
   const porLocal={};
-  ids.forEach(id=>{porLocal[id]={venta:0,cubiertos:0,compras:0,diffArq:0,abiertos:0,cerrados:0};});
+  ids.forEach(id=>{porLocal[id]={venta:0,cubiertos:0,compras:0,egresos:0,delivery:0,cfijos:0,cerrados:0,abiertos:0};});
   todos.forEach(t=>{
     const r=porLocal[t.local_id];if(!r)return;
     const c=t.cierres_turno?.[0];
     if(t.estado==='cerrado'&&c){
       r.venta+=(c.venta_total||0);
       r.cubiertos+=(c.cubiertos||0);
-      r.diffArq+=((c.efectivo_real||0)-(c.efectivo_esperado||0));
-      r.compras+=(comprasPorTurno[t.id]||0);
       r.cerrados++;
-    } else {
-      r.abiertos++;
-    }
+    } else r.abiertos++;
   });
+  movs.forEach(m=>{
+    const lid=todos.find(t=>t.id===m.turno_id)?.local_id;
+    if(!lid||!porLocal[lid])return;
+    if(m.tipo==='compra')porLocal[lid].compras+=(m.monto||0);
+    if(m.tipo==='egreso')porLocal[lid].egresos+=(m.monto||0);
+    if(m.tipo==='venta'&&m.origen==='delivery')porLocal[lid].delivery+=(m.monto||0);
+  });
+  costosFijos.forEach(c=>{if(porLocal[c.local_id])porLocal[c.local_id].cfijos+=(c.monto||0);});
 
   // KPIs consolidados
   const totalVenta=ids.reduce((a,id)=>a+(porLocal[id]?.venta||0),0);
   const totalCub=ids.reduce((a,id)=>a+(porLocal[id]?.cubiertos||0),0);
   const totalComp=ids.reduce((a,id)=>a+(porLocal[id]?.compras||0),0);
-  const totalDiff=ids.reduce((a,id)=>a+(porLocal[id]?.diffArq||0),0);
+  const totalDel=ids.reduce((a,id)=>a+(porLocal[id]?.delivery||0),0);
+  const totalEgr=ids.reduce((a,id)=>a+(porLocal[id]?.egresos||0),0);
+  const totalCf=ids.reduce((a,id)=>a+(porLocal[id]?.cfijos||0),0);
   const tktProm=totalCub>0?totalVenta/totalCub:0;
   const foodPct=totalVenta>0?totalComp/totalVenta*100:0;
+  const delPct=totalVenta>0?totalDel/totalVenta*100:0;
+  const resultado=totalVenta-totalComp-totalEgr-totalCf;
+  const margen=totalVenta>0?resultado/totalVenta*100:0;
 
-  // Ranking locales por venta
-  const ranking=todosLocales
-    .map(l=>({...l,...(porLocal[l.id]||{})}))
-    .sort((a,b)=>b.venta-a.venta);
-  const maxVenta=ranking[0]?.venta||1;
+  // Semáforos
+  const semFood=foodPct>40?'var(--err)':foodPct>35?'var(--warn)':'var(--ok)';
+  const semMar=margen>=8?'var(--ok)':margen>=4?'var(--warn)':'var(--err)';
+  const semMarIcon=margen>=8?'🟢':margen>=4?'🟡':'🔴';
+  const semMarLbl=margen>=8?'En rango':margen>=4?'Atención':'Crítico';
 
-  // Render
+  // Agrupación por concepto para el comparativo
+  const GRUPOS=[
+    {lbl:'Cafés',ids:todosLocales.filter(l=>l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
+    {lbl:'Otros',ids:todosLocales.filter(l=>!l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
+  ].filter(g=>g.ids.length);
+
+  // Filas del comparativo
+  const filaLocal=l=>{
+    const r=porLocal[l.id]||{};
+    const fc=r.venta>0?r.compras/r.venta*100:0;
+    const del=r.venta>0?r.delivery/r.venta*100:0;
+    const res=r.venta-r.compras-r.egresos-r.cfijos;
+    const mar=r.venta>0?res/r.venta*100:0;
+    const fcColor=fc>40?'var(--err)':fc>35?'var(--warn)':'var(--ok)';
+    const marIcon=mar>=8?'🟢':mar>=4?'🟡':'🔴';
+    const marLbl=mar>=8?'En rango':mar>=4?'Atención':'Crítico';
+    const nombre=l.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
+    return`<tr>
+      <td title="${l.nombre}" style="font-weight:500">${nombre}</td>
+      <td>${r.venta>0?fmt(r.venta):'—'}</td>
+      <td>${r.cubiertos>0?fmtN(r.cubiertos):'—'}</td>
+      <td>${r.cubiertos>0?fmt(r.venta/r.cubiertos):'—'}</td>
+      <td style="color:${fcColor};font-weight:600">${r.cerrados>0?fc.toFixed(1)+'%':'—'}</td>
+      <td>${r.venta>0?del.toFixed(1)+'%':'—'}</td>
+      <td style="color:${mar>=8?'var(--ok)':mar>=4?'var(--warn)':'var(--err)'}">${r.cerrados>0?fmt(res):'—'}</td>
+      <td style="font-size:16px;text-align:center"><span class="sf" data-label="${marLbl}">${r.cerrados>0?marIcon:'—'}</span></td>
+    </tr>`;
+  };
+
+  const tablaGrupos=GRUPOS.map(g=>`
+    <tr style="background:var(--bg)"><td colspan="8" style="font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:6px 12px">${g.lbl}</td></tr>
+    ${todosLocales.filter(l=>g.ids.includes(l.id)).map(filaLocal).join('')}
+  `).join('');
+
   body.innerHTML=`
-    <!-- KPIs consolidados -->
-    <div class="exec-kpi-grid">
+    <!-- 09D: KPIs ejecutivos — sin diferencia de arqueo -->
+    <div class="exec-kpi-grid" style="grid-template-columns:repeat(3,1fr)">
       <div class="exec-kpi">
         <div class="exec-kpi-lbl">Venta total grupo</div>
         <div class="exec-kpi-val">${fmt(totalVenta)}</div>
-        <div class="exec-kpi-sub">${MESES[execMesMonth]} ${execMesYear}</div>
+        <div class="exec-kpi-sub">Operaciones: ${fmtN(totalCub)} · Prom. ${tktProm>0?fmt(tktProm):'—'}</div>
       </div>
       <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Cubiertos</div>
-        <div class="exec-kpi-val">${fmtN(totalCub)}</div>
-        <div class="exec-kpi-sub">Ticket prom. ${tktProm>0?fmt(tktProm):'—'}</div>
+        <div class="exec-kpi-lbl">Foodcost</div>
+        <div class="exec-kpi-val" style="color:${semFood}">${foodPct.toFixed(1)}%</div>
+        <div class="exec-kpi-sub">Límite grupo: 35% · ${fmt(totalComp)} en compras</div>
       </div>
       <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Compras / Foodcost</div>
-        <div class="exec-kpi-val" style="color:${foodPct>28?'var(--err)':foodPct>20?'var(--warn)':'var(--ok)'}">${foodPct.toFixed(1)}%</div>
-        <div class="exec-kpi-sub">${fmt(totalComp)} en compras</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Diferencia arq. acum.</div>
-        <div class="exec-kpi-val" style="color:${Math.abs(totalDiff)<500?'var(--ok)':Math.abs(totalDiff)<3000?'var(--warn)':'var(--err)'}">${totalDiff>=0?'+':''}${fmt(totalDiff)}</div>
-        <div class="exec-kpi-sub">${ids.reduce((a,id)=>a+(porLocal[id]?.abiertos||0),0)} turno(s) abierto(s)</div>
+        <div class="exec-kpi-lbl">Resultado operativo est.</div>
+        <div class="exec-kpi-val" style="color:${semMar}">${fmt(resultado)}</div>
+        <div class="exec-kpi-sub">${semMarIcon} Margen ${margen.toFixed(1)}% · ${semMarLbl}</div>
       </div>
     </div>
 
-    <!-- Ranking locales -->
-    <div class="panel exec-ranking">
+    <!-- 09D: Comparativo de locales agrupado por concepto -->
+    <div class="panel">
       <div class="panel-head">
-        <div class="panel-title">Ranking por venta</div>
-        <div class="panel-sub">${MESES[execMesMonth]}</div>
+        <div class="panel-title">Comparativo de locales</div>
+        <div class="panel-sub">${MESES[execMesMonth]} ${execMesYear}</div>
       </div>
-      ${ranking.map((l,i)=>{
-        const pct=maxVenta>0?l.venta/maxVenta*100:0;
-        const color=LC_EXEC[i%LC_EXEC.length];
-        const pctGrupo=totalVenta>0?l.venta/totalVenta*100:0;
-        return`<div class="exec-rank-row">
-          <div class="exec-rank-pos">${i+1}</div>
-          <div class="exec-rank-nombre" title="${l.nombre}">${l.nombre}</div>
-          <div class="exec-rank-bar-wrap"><div class="exec-rank-bar" style="width:${pct}%;background:${color}"></div></div>
-          <div class="exec-rank-monto">${l.venta>0?fmt(l.venta):'—'}</div>
-          <div class="exec-rank-pct">${l.venta>0?pctGrupo.toFixed(0)+'%':'—'}</div>
-        </div>`;
-      }).join('')}
+      <div style="overflow-x:auto">
+        <table class="exec-sem-table" style="min-width:640px">
+          <thead>
+            <tr>
+              <th style="text-align:left">Local</th>
+              <th>Venta</th>
+              <th>Operaciones</th>
+              <th>Prom.</th>
+              <th>Foodcost</th>
+              <th>Delivery</th>
+              <th>Resultado est.</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>${tablaGrupos}</tbody>
+        </table>
+      </div>
+      <div style="padding:8px 16px;font-size:10px;color:var(--t3)">
+        Resultado est. = Venta − Compras − Egresos − Costos fijos · Semáforo: 🟢 ≥8% · 🟡 4-8% · 🔴 &lt;4%
+      </div>
     </div>
 
-    <!-- Semáforo por local -->
-    <div class="panel exec-semaforo">
-      <div class="panel-head">
-        <div class="panel-title">Estado operativo por local</div>
-        <div class="panel-sub">Foodcost · Diferencia de arqueo · Turnos</div>
+    <!-- 09D: Delivery resumen -->
+    <div class="exec-kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-top:0">
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Delivery total</div>
+        <div class="exec-kpi-val">${fmt(totalDel)}</div>
+        <div class="exec-kpi-sub">${delPct.toFixed(1)}% sobre venta del grupo</div>
       </div>
-      <table class="exec-sem-table">
-        <thead>
-          <tr>
-            <th>Local</th>
-            <th>Foodcost</th>
-            <th>Dif. arqueo</th>
-            <th>Turnos cerrados</th>
-            <th>Abiertos</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ranking.map(l=>{
-            const fc=l.venta>0?l.compras/l.venta*100:0;
-            const fcClass=fc>28?'exec-pill-err':fc>20?'exec-pill-warn':l.cerrados>0?'exec-pill-ok':'exec-pill-neu';
-            const fcTxt=l.cerrados>0?fc.toFixed(1)+'%':'—';
-            const dClass=Math.abs(l.diffArq)<500?'exec-pill-ok':Math.abs(l.diffArq)<3000?'exec-pill-warn':'exec-pill-err';
-            const dTxt=l.cerrados>0?(l.diffArq>=0?'+':'')+fmt(l.diffArq):'—';
-            const abClass=l.abiertos>0?'exec-pill-warn':'exec-pill-neu';
-            return`<tr>
-              <td>${l.nombre}</td>
-              <td><span class="exec-pill ${fcClass}"><span class="exec-dot ${fcClass.replace('exec-pill-','exec-dot-')}"></span>${fcTxt}</span></td>
-              <td><span class="exec-pill ${l.cerrados>0?dClass:'exec-pill-neu'}">${dTxt}</span></td>
-              <td style="color:var(--t2)">${l.cerrados}</td>
-              <td><span class="exec-pill ${abClass}">${l.abiertos>0?l.abiertos+' abierto(s)':'—'}</span></td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Disponible total</div>
+        <div class="exec-kpi-val" id="execDisp">—</div>
+        <div class="exec-kpi-sub">Efectivo real acumulado</div>
+      </div>
     </div>
   `;
+
+  // Disponible: efectivo real − alivios
+  const{data:cierresTodos}=await sb.from('cierres_turno')
+    .select('efectivo_real,turno_id')
+    .in('turno_id',tids);
+  const efReal=(cierresTodos||[]).reduce((a,c)=>a+(c.efectivo_real||0),0);
+  const alivios=movs.filter(m=>m.tipo==='alivio').reduce((a,m)=>a+(m.monto||0),0);
+  const dispEl=document.getElementById('execDisp');
+  if(dispEl)dispEl.textContent=fmt(efReal-alivios);
 }
+
 
 function toggleSidebar(){
   const sb=document.getElementById('sidebar');
