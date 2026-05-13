@@ -901,6 +901,7 @@ async function renderVistaFin({cierres,movs,mes,year}){
     </div>
     <div style="font-size:11px;color:var(--t3);margin-top:8px">Margen: ${margen.toFixed(1)}% sobre venta · ${semLabel}</div>
     <div style="font-size:10px;color:var(--t3);margin-top:4px">No incluye impuestos definitivos, amortizaciones ni pasivos.</div>`;
+}// fin renderVistaFin
 
 function renderDisponible(cierres,movs){
   const ef=cierres.reduce((a,c)=>a+(c.efectivo_real||0),0);
