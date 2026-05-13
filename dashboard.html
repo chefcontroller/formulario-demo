@@ -815,11 +815,11 @@ async function init(){
   set('sbUser',userEmail+'\n'+userRol);
   set('sbUserE',userEmail+'\n'+userRol);
   renderPastillas();
-  // Mostrar botones de alternancia solo para admin
-  if(userRol==='admin'){
+  // Mostrar botones de alternancia para admin Y owner
+  if(userRol==='admin'||userRol==='owner'){
     document.getElementById('sbExecBtn').classList.remove('hidden');
     document.getElementById('sbOperBtn').classList.remove('hidden');
-    // 09C: mostrar tabs en todas las vistas para admin
+    // 09C: mostrar tabs en todas las vistas
     ['vistaTabsOper','vistaTabsExec','vistaTabsFin'].forEach(id=>{
       const el=document.getElementById(id);if(el)el.style.display='flex';
     });
