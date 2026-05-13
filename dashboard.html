@@ -201,43 +201,32 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 .btn-reset{flex:1;padding:10px;background:var(--bg);border:1px solid var(--b);border-radius:var(--rs);font-size:13px;color:var(--t2);font-family:'Inter',sans-serif;cursor:pointer}
 .btn-guardar-met{flex:2;padding:10px;background:var(--p);border:none;border-radius:var(--rs);font-size:13px;font-weight:600;color:#fff;font-family:'Inter',sans-serif;cursor:pointer}
 
-/* VISTA EJECUTIVA */
-.exec-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.exec-kpi{background:var(--s);border:1.5px solid var(--b);border-radius:var(--r);padding:16px 18px}
-.exec-kpi-lbl{font-size:10px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.exec-kpi-val{font-size:22px;font-weight:700;color:var(--t);letter-spacing:-.5px;line-height:1}
-.exec-kpi-sub{font-size:11px;color:var(--t3);margin-top:4px}
-.exec-ranking{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.exec-rank-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--b)}
-.exec-rank-row:last-child{border-bottom:none}
-.exec-rank-pos{font-size:11px;font-weight:700;color:var(--t3);width:16px;flex-shrink:0;text-align:center}
-.exec-rank-nombre{font-size:12px;font-weight:600;color:var(--t);width:150px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.exec-rank-bar-wrap{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
-.exec-rank-bar{height:100%;border-radius:4px;transition:width .6s ease}
-.exec-rank-monto{font-size:12px;font-weight:600;color:var(--t);width:90px;text-align:right;flex-shrink:0}
-.exec-rank-pct{font-size:10px;color:var(--t3);width:36px;text-align:right;flex-shrink:0}
-.exec-semaforo{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.exec-sem-table{width:100%;border-collapse:collapse;font-size:12px}
-.exec-sem-table thead th{padding:9px 14px;text-align:right;font-weight:500;color:var(--t2);border-bottom:2px solid var(--b);background:var(--bg);font-size:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
-.exec-sem-table thead th:first-child{text-align:left}
-.exec-sem-table tbody td{padding:10px 14px;border-bottom:1px solid var(--b);color:var(--t);text-align:right}
-.exec-sem-table tbody td:first-child{text-align:left;font-weight:600}
-.exec-sem-table tbody tr:last-child td{border-bottom:none}
-.exec-sem-table tbody tr:hover td{background:var(--bg)}
-.exec-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px}
-.exec-pill-ok{background:var(--ok-bg);color:var(--ok)}
-.exec-pill-warn{background:var(--warn-bg);color:#B45309}
-.exec-pill-err{background:var(--err-bg);color:var(--err)}
-.exec-pill-neu{background:var(--bg);color:var(--t3)}
-.exec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.exec-view-toggle{display:flex;gap:6px;margin-bottom:16px}
-.exec-vt-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--b);background:var(--s);color:var(--t2);font-family:'Inter',sans-serif;transition:all .15s}
-.exec-vt-btn.active{background:var(--p);border-color:var(--p);color:#fff}
-@media(max-width:900px){.exec-kpi-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.exec-kpi-grid{grid-template-columns:1fr 1fr}.exec-rank-nombre{width:100px}}
+/* 09C — TABS DE VISTA */
+.vista-tabs{display:flex;gap:4px;margin-left:auto;margin-right:8px}
+.vista-tab{background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.8);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.vista-tab.active{background:#fff;color:var(--pd);font-weight:600}
+.vista-tab:hover:not(.active){background:rgba(255,255,255,.28);color:#fff}
 
-/* SIDEBAR OVERLAY MOBILE */
-.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90}
+/* 09C — SEMÁFORO CON TOOLTIP */
+.sf{display:inline-block;font-size:14px;cursor:default;position:relative}
+.sf::after{content:attr(data-label);display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--t);color:#fff;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:500;white-space:nowrap;pointer-events:none;z-index:10}
+.sf:hover::after{display:block}
+
+/* 09C — LOCALES BAR STICKY */
+.locales-sticky{position:sticky;top:54px;z-index:40;background:var(--s);border-bottom:1px solid var(--b);padding:8px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+
+/* 09C — VISTA FINANCIERA placeholder */
+.fin-disclaimer{font-size:11px;color:var(--t3);background:var(--warn-bg);border:1px solid var(--warn);border-radius:var(--rs);padding:8px 12px;margin-bottom:14px}
+.fin-bloque{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.fin-bloque-head{padding:10px 16px;border-bottom:1px solid var(--b);background:var(--bg);font-size:12px;font-weight:600;color:var(--t);display:flex;align-items:center;justify-content:space-between}
+.fin-bloque-body{padding:14px 16px}
+.fin-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--b);font-size:13px}
+.fin-row:last-child{border-bottom:none}
+.fin-row-lbl{color:var(--t2)}
+.fin-row-val{font-weight:500;color:var(--t)}
+.fin-row.total{font-weight:600;color:var(--pd);font-size:14px;padding-top:10px}
+.fin-row.negativo .fin-row-val{color:var(--err)}
+.fin-row.positivo .fin-row-val{color:var(--ok)}
 
 /* SPINNER */
 .spwrap{display:flex;align-items:center;justify-content:center;padding:28px;color:var(--t3);font-size:12px;gap:8px}
@@ -268,7 +257,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
   .met-panel{width:100%;max-width:100%;border-left:none}
   .btn-metricas span{display:none}
   /* Locales: wrap limpio */
-  .locales-bar{gap:6px}
+  .locales-sticky{gap:6px;padding:6px 12px}
   .local-pill{font-size:11px;padding:4px 10px}
 }
 </style>
@@ -333,7 +322,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
           <div id="bellList"></div>
         </div>
       </div>
-      <button class="btn-metricas" onclick="toggleMet()">&#9881; Ver métricas</button>
+      <!-- 09C: TABS DE VISTA — visibles según rol, generadas por setupNavPorRol() -->
+      <div class="vista-tabs" id="vistaTabs"></div>
+      <button class="btn-metricas" onclick="toggleMet()">&#9881; <span>Ver métricas</span></button>
       <button class="btn-logout-h" onclick="logout()">Salir</button>
     </div>
   </div>
@@ -359,34 +350,28 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         Delivery
       </button>
       <div class="sb-section">Sistema</div>
-      <button class="sb-item exec-only hidden" id="sbExecBtn" onclick="showExecView()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
-        Vista ejecutiva
-      </button>
-      <button class="sb-item exec-only hidden" id="sbOperBtn" onclick="showOperView()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Vista operativa
-      </button>
       <button class="sb-item" onclick="irACarga()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Ir al formulario
       </button>
-      <div class="sb-bottom">
+      <div class="sb-bottom" id="sbBottom">
         <div class="sb-user" id="sbUser"></div>
         <button class="btn-ir-carga" onclick="irACarga()">&#8592; Formulario de carga</button>
       </div>
     </nav>
 
     <main class="dash-main">
-    <div class="dash-body">
 
-      <div class="locales-bar" id="localesBar"><span class="locales-lbl">Locales:</span></div>
+      <!-- 09C: SELECTOR DE LOCALES STICKY -->
+      <div class="locales-sticky" id="localesBar"><span class="locales-lbl">Locales:</span></div>
 
-      <!-- KPIs -->
-      <div class="kpi-grid" id="kpiGrid"></div>
+      <!-- VISTA EJECUTIVA -->
+      <div id="vistaExec" class="dash-body">
+        <!-- KPIs -->
+        <div class="kpi-grid" id="kpiGrid"></div>
 
-      <!-- PROYECCION -->
-      <div class="panel" id="modProy">
+        <!-- PROYECCION -->
+        <div class="panel" id="modProy">
         <div class="panel-head">
           <div class="panel-title">Proyección del mes</div>
           <div class="panel-sub" id="proyDias"></div>
@@ -471,65 +456,92 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
       </div>
 
       <div style="height:40px"></div>
-    </div>
-    </main>
-  </div>
-</div>
-</div>
+      </div><!-- /vistaExec -->
 
-<!-- VISTA EJECUTIVA -->
-<div id="sExecView" style="display:none">
-<div class="dash-root">
-  <div class="dash-hdr">
-    <button class="hdr-hamburger" onclick="toggleSidebar()">&#9776;</button>
-    <div class="hdr-logo">
-      <div class="hdr-logo-mark">CC</div>
-      <div class="hdr-logo-txt">
-        <div class="hdr-logo-name">Chef<span>Controller</span></div>
-        <div class="hdr-logo-sub">Ejecutivo</div>
-      </div>
-    </div>
-    <div class="hdr-sep"></div>
-    <div class="hdr-periodo">
-      <button class="hdr-nav-btn" onclick="execCambiarMes(-1)">&lsaquo;</button>
-      <div class="hdr-mes-lbl" id="execHdrMes">—</div>
-      <button class="hdr-nav-btn" onclick="execCambiarMes(1)">&rsaquo;</button>
-    </div>
-    <div class="hdr-right">
-      <button class="btn-logout-h" onclick="logout()">Salir</button>
-    </div>
-  </div>
-  <div class="dash-layout">
-    <div class="sb-overlay hidden" id="sbOverlayE" onclick="closeSidebar()"></div>
-    <nav class="sidebar" id="sidebarE">
-      <div class="sb-section">Navegación</div>
-      <button class="sb-item" id="sbExecBtn2" onclick="showExecView()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
-        Vista ejecutiva
-      </button>
-      <button class="sb-item" id="sbOperBtn2" onclick="showOperView()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Vista operativa
-      </button>
-      <div class="sb-section">Sistema</div>
-      <button class="sb-item" onclick="irACarga()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Ir al formulario
-      </button>
-      <div class="sb-bottom">
-        <div class="sb-user" id="sbUserE"></div>
-        <button class="btn-ir-carga" onclick="irACarga()">&#8592; Formulario</button>
-      </div>
-    </nav>
-    <main class="dash-main">
-    <div class="dash-body">
-      <div id="execBody"><div class="spwrap"><div class="spinner"></div> Cargando...</div></div>
-      <div style="height:40px"></div>
-    </div>
+      <!-- VISTA OPERATIVA -->
+      <div id="vistaOper" class="dash-body" style="display:none">
+        <!-- KPIs operativos — mismos que ejecutiva por ahora, se diferencia en 09F -->
+        <div class="kpi-grid" id="kpiGridOper"></div>
+
+        <!-- TABLA VENTA DIARIA (operativa) -->
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Venta diaria <span style="font-size:10px;color:var(--t3);font-weight:400">mes completo</span></div>
+            <div class="panel-sub" id="ventaSubOper"></div>
+          </div>
+          <div class="vd-wrap" id="ventaBodyOper" style="max-height:380px;overflow-y:auto"><div class="spwrap"><div class="spinner"></div><span>Cargando...</span></div></div>
+        </div>
+
+        <!-- COMPRAS OPERATIVA -->
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Compras por rubro — foodcost</div>
+            <div class="panel-sub" id="comprasSubOper"></div>
+          </div>
+          <div class="panel-body" id="comprasBodyOper"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <div style="height:40px"></div>
+      </div><!-- /vistaOper -->
+
+      <!-- VISTA FINANCIERA — 09E -->
+      <div id="vistaFin" class="dash-body" style="display:none">
+        <div class="fin-disclaimer">
+          ⚠️ <strong>Resultado operativo estimado</strong> — calculado según movimientos cargados en el sistema. No reemplaza cierre contable. No incluye impuestos definitivos ni amortizaciones.
+        </div>
+
+        <!-- Bloque 1 — Resumen financiero -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head">Resumen financiero <span style="font-size:11px;font-weight:400;color:var(--t3)" id="finMesLbl"></span></div>
+          <div class="fin-bloque-body" id="finResumen"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <!-- Bloque 3 — Compras / IVA -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head">Compras <span style="font-size:11px;font-weight:400;color:var(--t3)">neto · IVA · total factura</span></div>
+          <div class="fin-bloque-body" id="finCompras"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <!-- Bloque 4 — Egresos -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head">Egresos operativos</div>
+          <div class="fin-bloque-body" id="finEgresos"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <!-- Bloque 5 — Costos fijos -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head">Costos fijos del período</div>
+          <div class="fin-bloque-body" id="finCostosFijos"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <!-- Bloque 6 — P&L estimado -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head" style="background:rgba(47,111,237,.05)">P&L operativo estimado</div>
+          <div class="fin-bloque-body" id="finPL"><div class="spwrap"><div class="spinner"></div></div></div>
+        </div>
+
+        <!-- Bloque 7 — Benchmarks -->
+        <div class="fin-bloque">
+          <div class="fin-bloque-head">Benchmarks — gastronomía argentina 2026</div>
+          <div class="fin-bloque-body" id="finBench">
+            <div class="fin-row"><span class="fin-row-lbl">CMV / Foodcost referencia</span><span class="fin-row-val">35-40%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Sueldos / RRHH referencia</span><span class="fin-row-val">25-28%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Alquiler referencia</span><span class="fin-row-val">8-9%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Gastos bancarios referencia</span><span class="fin-row-val">6-7%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Margen bueno referencia (2024)</span><span class="fin-row-val" style="color:var(--ok)">13%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Margen mínimo (verde)</span><span class="fin-row-val" style="color:var(--ok)">≥ 8%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Margen alerta (amarillo)</span><span class="fin-row-val" style="color:var(--warn)">4-8%</span></div>
+            <div class="fin-row"><span class="fin-row-lbl">Margen crítico (rojo)</span><span class="fin-row-val" style="color:var(--err)">&lt; 4%</span></div>
+          </div>
+        </div>
+
+        <div style="height:40px"></div>
+      </div><!-- /vistaFin -->
+
     </main>
-  </div>
-</div>
-</div>
+  </div><!-- /dash-layout -->
+</div><!-- /dash-root -->
+</div><!-- /sDash -->
 
 <!-- PANEL METRICAS -->
 <div class="met-overlay" id="metOverlay" onclick="toggleMet()"></div>
@@ -560,8 +572,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 </div>
 
 <script>
-const SB_URL='https://fvlkmxqfqmzbmoofmzcb.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bGtteHFmcW16Ym1vb2ZtemNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQwMTcsImV4cCI6MjA5Mzc0MDAxN30._zZKCMsREtsIdCbKl86JGaKCcWqHHs3dKRKGjM8cRXg';
+const SB_URL='https://uxbqjswzhbvdiorwqhes.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4YnFqc3d6aGJ2ZGlvcndxaGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTI0MzEsImV4cCI6MjA5Mjg4ODQzMX0.bCqdR-yccahVZy1n_9d9MZxmtrV9mXo-rm6iA893xiQ';
 const{createClient}=supabase;
 const sb=createClient(SB_URL,SB_KEY);
 
@@ -576,7 +588,9 @@ const fechaHoy=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getM
 const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
 const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');};
 
-let mesYear=new Date().getFullYear(),mesMonth=new Date().getMonth();
+// 09C: Default abril 2026 — último mes con datos en demo
+// En producción cambiar a: new Date().getFullYear(), new Date().getMonth()
+let mesYear=2026,mesMonth=3;
 let userRol='',grupoId='',userEmail='';
 let todosLocales=[],localesActivos=new Set();
 let turnoLocalMap={};
@@ -618,6 +632,7 @@ async function init(){
   const{data:usr}=await sb.from('usuarios').select('*,usuario_local(local_id,locales(id,nombre,codigo))').eq('email',userEmail).single();
   if(usr){
     userRol=usr.rol;grupoId=usr.grupo_id||'';
+    // 09C: roles permitidos — owner agregado, dueno eliminado (migrado a owner)
     if(!['supervisor','owner','admin'].includes(userRol)){
       await sb.auth.signOut();
       document.getElementById('lErr').textContent='Sin acceso al dashboard. Ir al formulario de carga.';
@@ -630,32 +645,95 @@ async function init(){
     if(locs.length)todosLocales=locs;
   }
   if(!todosLocales.length){
-    // Admin sin usuario_local asignado: cargar todos los locales activos
-    const{data:locs}=await sb.from('locales').select('id,nombre,codigo').eq('activo',true).order('nombre');
+    // Owner y admin sin usuario_local: cargar todos los locales activos del grupo
+    const q=sb.from('locales').select('id,nombre,codigo').eq('activo',true).order('nombre');
+    if(grupoId)q.eq('grupo_id',grupoId);
+    const{data:locs}=await q;
     todosLocales=locs||[];
   }
   localesActivos=new Set(todosLocales.map(l=>l.id));
   set('sbUser',userEmail+'\n'+userRol);
-  set('sbUserE',userEmail+'\n'+userRol);
   renderPastillas();
-  // Mostrar botones de alternancia solo para admin
-  if(userRol==='admin'){
-    document.getElementById('sbExecBtn').classList.remove('hidden');
-    document.getElementById('sbOperBtn').classList.remove('hidden');
-  }
+  // 09C: routing por rol — owner entra directo a vista ejecutiva
+  // admin puede alternar, supervisor va a operativa
+  setupNavPorRol();
   document.getElementById('ldOverlay').classList.add('fade');
   setTimeout(()=>document.getElementById('ldOverlay').remove(),350);
-  // Owner ve solo la vista ejecutiva; admin y supervisor ven la operativa
-  if(userRol==='owner'){
-    showExecView();
-  } else {
-    show('sDash');
-    await loadDash();
-  }
+  show('sDash');
+  if(userRol==='owner') showVistaExec();
+  else if(userRol==='supervisor') showVistaOper();
+  else showVistaExec(); // admin: default ejecutiva
+  await loadDash();
 }
 
 async function logout(){await sb.auth.signOut();location.reload();}
 function irACarga(){window.location.href='index.html';}
+
+// 09C — NAVEGACIÓN POR ROL
+function setupNavPorRol(){
+  const tabs=document.getElementById('vistaTabs');
+  tabs.innerHTML='';
+  // Owner: solo vista ejecutiva — sin tabs
+  if(userRol==='owner'){
+    document.getElementById('sbBottom')?.style&&(document.getElementById('sbBottom').style.display='none');
+    // Ocultar botón ir al formulario en sidebar
+    document.querySelectorAll('.btn-ir-carga').forEach(b=>b.style.display='none');
+    document.querySelector('.sb-item[onclick="irACarga()"]')?.style&&(document.querySelector('.sb-item[onclick="irACarga()"]').style.display='none');
+    return; // sin tabs para owner
+  }
+  // Supervisor: solo operativa — sin tabs
+  if(userRol==='supervisor') return;
+  // Admin: puede alternar entre las tres vistas
+  [
+    {id:'exec',lbl:'Ejecutiva'},
+    {id:'oper',lbl:'Operativa'},
+    {id:'fin', lbl:'Financiera'},
+  ].forEach(v=>{
+    const btn=document.createElement('button');
+    btn.className='vista-tab'+(v.id==='exec'?' active':'');
+    btn.textContent=v.lbl;
+    btn.id='tab_'+v.id;
+    btn.onclick=()=>{
+      if(v.id==='exec') showVistaExec();
+      else if(v.id==='oper') showVistaOper();
+      else showVistaFin();
+    };
+    tabs.appendChild(btn);
+  });
+}
+
+let vistaActual='exec';
+function showVistaExec(){
+  vistaActual='exec';
+  document.getElementById('vistaExec').style.display='';
+  document.getElementById('vistaOper').style.display='none';
+  document.getElementById('vistaFin').style.display='none';
+  document.querySelectorAll('.vista-tab').forEach(t=>t.classList.toggle('active',t.id==='tab_exec'));
+}
+function showVistaOper(){
+  vistaActual='oper';
+  document.getElementById('vistaExec').style.display='none';
+  document.getElementById('vistaOper').style.display='';
+  document.getElementById('vistaFin').style.display='none';
+  document.querySelectorAll('.vista-tab').forEach(t=>t.classList.toggle('active',t.id==='tab_oper'));
+  // Poblar vista operativa con los mismos datos si ya cargaron
+  const vb=document.getElementById('ventaBody');
+  const vbo=document.getElementById('ventaBodyOper');
+  if(vb&&vbo&&vb.innerHTML&&!vbo.querySelector('table'))vbo.innerHTML=vb.innerHTML;
+  const cb=document.getElementById('comprasBody');
+  const cbo=document.getElementById('comprasBodyOper');
+  if(cb&&cbo&&cb.innerHTML&&!cbo.querySelector('table'))cbo.innerHTML=cb.innerHTML;
+}
+function showVistaFin(){
+  vistaActual='fin';
+  document.getElementById('vistaExec').style.display='none';
+  document.getElementById('vistaOper').style.display='none';
+  document.getElementById('vistaFin').style.display='';
+  document.querySelectorAll('.vista-tab').forEach(t=>t.classList.toggle('active',t.id==='tab_fin'));
+  set('finMesLbl',MESES[mesMonth]+' '+mesYear);
+  // Renderizar vista financiera si hay datos
+  if(window._finData) renderVistaFin(window._finData);
+}
 
 async function cambiarMes(dir){
   mesMonth+=dir;
@@ -673,7 +751,11 @@ function renderPastillas(){
   todosLocales.forEach((loc,i)=>{
     const p=document.createElement('button');
     p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
-    p.textContent=loc.nombre;p.onclick=()=>toggleLocal(loc.id);bar.appendChild(p);
+    // Nombre corto para las pills
+    const nombre=loc.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
+    p.textContent=nombre;p.onclick=()=>toggleLocal(loc.id);
+    p.title=loc.nombre; // nombre completo en tooltip
+    bar.appendChild(p);
   });
 }
 function toggleLocal(id){
@@ -740,7 +822,85 @@ async function loadDash(){
   renderCompras(movs,cierres);
   set('ventaSub',localesActivos.size+' local'+(localesActivos.size>1?'es':''));
   set('comprasSub',MESES[mesMonth]+' '+mesYear);
+
+  // 09C: guardar datos para Vista Financiera
+  window._finData={cierres,movs,desde,hasta,mes:mesMonth,year:mesYear};
+  set('finMesLbl',MESES[mesMonth]+' '+mesYear);
+  if(vistaActual==='fin') renderVistaFin(window._finData);
 }
+
+// 09C — VISTA FINANCIERA — renderizado básico
+// Se expande en 09E con IVA, costos fijos y P&L completo
+async function renderVistaFin({cierres,movs,mes,year}){
+  const vt=cierres.reduce((a,c)=>a+(c.venta_total||0),0);
+  const compras=movs.filter(m=>m.tipo==='compra');
+  const egresos=movs.filter(m=>m.tipo==='egreso');
+
+  // Neto e IVA desde monto_neto/monto_iva persistidos
+  const compNeto=compras.reduce((a,m)=>a+(m.monto_neto??m.monto??0),0);
+  const compIva=compras.reduce((a,m)=>a+(m.monto_iva??0),0);
+  const compTotal=compras.reduce((a,m)=>a+(m.monto??0),0);
+  const egrTotal=egresos.reduce((a,m)=>a+(m.monto??0),0);
+
+  // Costos fijos del mes desde Supabase
+  const desde=`${year}-${String(mes+1).padStart(2,'0')}-01`;
+  const{data:cf}=await sb.from('costos_fijos')
+    .select('concepto,descripcion,monto,local_id')
+    .in('local_id',[...localesActivos])
+    .eq('mes',desde);
+  const costosFijos=cf||[];
+  const cfTotal=costosFijos.reduce((a,c)=>a+(c.monto||0),0);
+
+  const resultado=vt-compNeto-egrTotal-cfTotal;
+  const margen=vt>0?resultado/vt*100:0;
+  const semColor=margen>=8?'var(--ok)':margen>=4?'var(--warn)':'var(--err)';
+  const semLabel=margen>=8?'🟢 En rango':margen>=4?'🟡 Atención':'🔴 Crítico';
+
+  // Bloque 1 — Resumen
+  document.getElementById('finResumen').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Venta neta</div><div style="font-size:22px;font-weight:700;color:var(--t)">${fmt(vt)}</div></div>
+      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Resultado estimado</div><div style="font-size:22px;font-weight:700;color:${semColor}">${fmt(resultado)}</div></div>
+      <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Margen</div><div style="font-size:22px;font-weight:700;color:${semColor}">${margen.toFixed(1)}% <span class="sf" data-label="${semLabel}" style="font-size:16px">${margen>=8?'🟢':margen>=4?'🟡':'🔴'}</span></div></div>
+    </div>`;
+
+  // Bloque 3 — Compras
+  document.getElementById('finCompras').innerHTML=`
+    <div class="fin-row"><span class="fin-row-lbl">Compras netas</span><span class="fin-row-val">${fmt(compNeto)}</span></div>
+    <div class="fin-row"><span class="fin-row-lbl">IVA compras</span><span class="fin-row-val" style="color:var(--t3)">${fmt(compIva)}</span></div>
+    <div class="fin-row total"><span class="fin-row-lbl">Total factura</span><span class="fin-row-val">${fmt(compTotal)}</span></div>
+    <div class="fin-row" style="margin-top:8px"><span class="fin-row-lbl">Foodcost sobre neto</span><span class="fin-row-val">${vt>0?(compNeto/vt*100).toFixed(1)+'%':'—'}</span></div>
+    <div class="fin-row"><span class="fin-row-lbl">Foodcost sobre venta total</span><span class="fin-row-val">${vt>0?(compTotal/vt*100).toFixed(1)+'%':'—'}</span></div>`;
+
+  // Bloque 4 — Egresos
+  const egrPorConc={};egresos.forEach(m=>{const k=m.concepto||'Otros';egrPorConc[k]=(egrPorConc[k]||0)+(m.monto||0);});
+  document.getElementById('finEgresos').innerHTML=Object.entries(egrPorConc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
+    `<div class="fin-row"><span class="fin-row-lbl" style="text-transform:capitalize">${k}</span><span class="fin-row-val">${fmt(v)}</span></div>`
+  ).join('')+`<div class="fin-row total"><span class="fin-row-lbl">Total egresos operativos</span><span class="fin-row-val">${fmt(egrTotal)}</span></div>`;
+
+  // Bloque 5 — Costos fijos
+  const cfPorConc={};costosFijos.forEach(c=>{const k=c.concepto||'otros';cfPorConc[k]=(cfPorConc[k]||0)+(c.monto||0);});
+  const cfLabels={sueldos:'Sueldos / RRHH',alquiler:'Alquiler',gastos_bancarios:'Gastos bancarios',impuestos:'Impuestos estimados',servicios:'Servicios',descartables:'Descartables',limpieza:'Limpieza',mantenimiento:'Mantenimiento'};
+  document.getElementById('finCostosFijos').innerHTML=
+    (Object.keys(cfPorConc).length
+      ? Object.entries(cfPorConc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
+          `<div class="fin-row"><span class="fin-row-lbl">${cfLabels[k]||k}</span><span class="fin-row-val">${fmt(v)} <span style="font-size:10px;color:var(--t3)">${vt>0?'('+((v/vt)*100).toFixed(1)+'%)':''}</span></span></div>`
+        ).join('')
+      : '<div class="empty">Sin costos fijos cargados para este período</div>')
+    +`<div class="fin-row total"><span class="fin-row-lbl">Total costos fijos</span><span class="fin-row-val">${fmt(cfTotal)}</span></div>`;
+
+  // Bloque 6 — P&L
+  document.getElementById('finPL').innerHTML=`
+    <div class="fin-row"><span class="fin-row-lbl">Venta neta</span><span class="fin-row-val positivo">${fmt(vt)}</span></div>
+    <div class="fin-row negativo"><span class="fin-row-lbl">− Compras netas</span><span class="fin-row-val">− ${fmt(compNeto)}</span></div>
+    <div class="fin-row negativo"><span class="fin-row-lbl">− Egresos operativos</span><span class="fin-row-val">− ${fmt(egrTotal)}</span></div>
+    <div class="fin-row negativo"><span class="fin-row-lbl">− Costos fijos</span><span class="fin-row-val">− ${fmt(cfTotal)}</span></div>
+    <div class="fin-row total ${resultado>=0?'positivo':'negativo'}">
+      <span class="fin-row-lbl">= Resultado operativo estimado</span>
+      <span class="fin-row-val" style="font-size:18px;color:${semColor}">${fmt(resultado)} <span class="sf" data-label="${semLabel}">${margen>=8?'🟢':margen>=4?'🟡':'🔴'}</span></span>
+    </div>
+    <div style="font-size:11px;color:var(--t3);margin-top:8px">Margen: ${margen.toFixed(1)}% sobre venta · ${semLabel}</div>
+    <div style="font-size:10px;color:var(--t3);margin-top:4px">No incluye impuestos definitivos, amortizaciones ni pasivos.</div>`;
 
 function renderDisponible(cierres,movs){
   const ef=cierres.reduce((a,c)=>a+(c.efectivo_real||0),0);
@@ -1119,194 +1279,8 @@ function renderCompras(movs,cierres){
 }
 
 /* UI */
-/* ── VISTA EJECUTIVA ─────────────────────────────────── */
-let execMesYear=new Date().getFullYear(),execMesMonth=new Date().getMonth();
-
-const LC_EXEC=['#2F6FED','#059669','#D97706','#7C3AED','#DC2626','#0891B2'];
-
-function showExecView(){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('sDash').style.display='none';
-  document.getElementById('sExecView').style.display='block';
-  document.getElementById('sbExecBtn2').classList.add('active');
-  document.getElementById('sbOperBtn2').classList.remove('active');
-  loadExecDash();
-}
-function showOperView(){
-  document.getElementById('sExecView').style.display='none';
-  document.getElementById('sDash').style.display='';
-  document.getElementById('sDash').classList.add('active');
-  document.getElementById('sbExecBtn2').classList.remove('active');
-  document.getElementById('sbOperBtn2').classList.add('active');
-  loadDash();
-}
-async function execCambiarMes(dir){
-  execMesMonth+=dir;
-  if(execMesMonth<0){execMesMonth=11;execMesYear--;}
-  if(execMesMonth>11){execMesMonth=0;execMesYear++;}
-  await loadExecDash();
-}
-
-async function loadExecDash(){
-  set('execHdrMes',MESES[execMesMonth]+' '+execMesYear);
-  const body=document.getElementById('execBody');
-  body.innerHTML='<div class="spwrap"><div class="spinner"></div> Cargando...</div>';
-
-  const desde=`${execMesYear}-${String(execMesMonth+1).padStart(2,'0')}-01`;
-  const hasta=new Date(execMesYear,execMesMonth+1,0).toISOString().split('T')[0];
-  const ids=todosLocales.map(l=>l.id);
-  if(!ids.length){body.innerHTML='<div class="empty">Sin locales asignados</div>';return;}
-
-  // Traer todos los turnos con cierres y movimientos del mes
-  const{data:turnos}=await sb.from('turnos')
-    .select('*,cierres_turno(*)')
-    .in('local_id',ids)
-    .gte('fecha',desde).lte('fecha',hasta)
-    .order('fecha').order('numero_turno');
-  const todos=turnos||[];
-  todos.forEach(t=>{
-    if(t.cierres_turno&&!Array.isArray(t.cierres_turno))t.cierres_turno=[t.cierres_turno];
-    else if(!t.cierres_turno)t.cierres_turno=[];
-  });
-
-  const tids=todos.map(t=>t.id);
-  let movs=[];
-  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,origen').in('turno_id',tids);movs=m||[];}
-
-  const comprasPorTurno={};
-  movs.filter(m=>m.tipo==='compra').forEach(m=>{comprasPorTurno[m.turno_id]=(comprasPorTurno[m.turno_id]||0)+(m.monto||0);});
-
-  // Agrupar por local
-  const porLocal={};
-  ids.forEach(id=>{porLocal[id]={venta:0,cubiertos:0,compras:0,diffArq:0,abiertos:0,cerrados:0};});
-  todos.forEach(t=>{
-    const r=porLocal[t.local_id];if(!r)return;
-    const c=t.cierres_turno?.[0];
-    if(t.estado==='cerrado'&&c){
-      r.venta+=(c.venta_total||0);
-      r.cubiertos+=(c.cubiertos||0);
-      r.diffArq+=((c.efectivo_real||0)-(c.efectivo_esperado||0));
-      r.compras+=(comprasPorTurno[t.id]||0);
-      r.cerrados++;
-    } else {
-      r.abiertos++;
-    }
-  });
-
-  // KPIs consolidados
-  const totalVenta=ids.reduce((a,id)=>a+(porLocal[id]?.venta||0),0);
-  const totalCub=ids.reduce((a,id)=>a+(porLocal[id]?.cubiertos||0),0);
-  const totalComp=ids.reduce((a,id)=>a+(porLocal[id]?.compras||0),0);
-  const totalDiff=ids.reduce((a,id)=>a+(porLocal[id]?.diffArq||0),0);
-  const tktProm=totalCub>0?totalVenta/totalCub:0;
-  const foodPct=totalVenta>0?totalComp/totalVenta*100:0;
-
-  // Ranking locales por venta
-  const ranking=todosLocales
-    .map(l=>({...l,...(porLocal[l.id]||{})}))
-    .sort((a,b)=>b.venta-a.venta);
-  const maxVenta=ranking[0]?.venta||1;
-
-  // Render
-  body.innerHTML=`
-    <!-- KPIs consolidados -->
-    <div class="exec-kpi-grid">
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Venta total grupo</div>
-        <div class="exec-kpi-val">${fmt(totalVenta)}</div>
-        <div class="exec-kpi-sub">${MESES[execMesMonth]} ${execMesYear}</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Cubiertos</div>
-        <div class="exec-kpi-val">${fmtN(totalCub)}</div>
-        <div class="exec-kpi-sub">Ticket prom. ${tktProm>0?fmt(tktProm):'—'}</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Compras / Foodcost</div>
-        <div class="exec-kpi-val" style="color:${foodPct>28?'var(--err)':foodPct>20?'var(--warn)':'var(--ok)'}">${foodPct.toFixed(1)}%</div>
-        <div class="exec-kpi-sub">${fmt(totalComp)} en compras</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Diferencia arq. acum.</div>
-        <div class="exec-kpi-val" style="color:${Math.abs(totalDiff)<500?'var(--ok)':Math.abs(totalDiff)<3000?'var(--warn)':'var(--err)'}">${totalDiff>=0?'+':''}${fmt(totalDiff)}</div>
-        <div class="exec-kpi-sub">${ids.reduce((a,id)=>a+(porLocal[id]?.abiertos||0),0)} turno(s) abierto(s)</div>
-      </div>
-    </div>
-
-    <!-- Ranking locales -->
-    <div class="panel exec-ranking">
-      <div class="panel-head">
-        <div class="panel-title">Ranking por venta</div>
-        <div class="panel-sub">${MESES[execMesMonth]}</div>
-      </div>
-      ${ranking.map((l,i)=>{
-        const pct=maxVenta>0?l.venta/maxVenta*100:0;
-        const color=LC_EXEC[i%LC_EXEC.length];
-        const pctGrupo=totalVenta>0?l.venta/totalVenta*100:0;
-        return`<div class="exec-rank-row">
-          <div class="exec-rank-pos">${i+1}</div>
-          <div class="exec-rank-nombre" title="${l.nombre}">${l.nombre}</div>
-          <div class="exec-rank-bar-wrap"><div class="exec-rank-bar" style="width:${pct}%;background:${color}"></div></div>
-          <div class="exec-rank-monto">${l.venta>0?fmt(l.venta):'—'}</div>
-          <div class="exec-rank-pct">${l.venta>0?pctGrupo.toFixed(0)+'%':'—'}</div>
-        </div>`;
-      }).join('')}
-    </div>
-
-    <!-- Semáforo por local -->
-    <div class="panel exec-semaforo">
-      <div class="panel-head">
-        <div class="panel-title">Estado operativo por local</div>
-        <div class="panel-sub">Foodcost · Diferencia de arqueo · Turnos</div>
-      </div>
-      <table class="exec-sem-table">
-        <thead>
-          <tr>
-            <th>Local</th>
-            <th>Foodcost</th>
-            <th>Dif. arqueo</th>
-            <th>Turnos cerrados</th>
-            <th>Abiertos</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ranking.map(l=>{
-            const fc=l.venta>0?l.compras/l.venta*100:0;
-            const fcClass=fc>28?'exec-pill-err':fc>20?'exec-pill-warn':l.cerrados>0?'exec-pill-ok':'exec-pill-neu';
-            const fcTxt=l.cerrados>0?fc.toFixed(1)+'%':'—';
-            const dClass=Math.abs(l.diffArq)<500?'exec-pill-ok':Math.abs(l.diffArq)<3000?'exec-pill-warn':'exec-pill-err';
-            const dTxt=l.cerrados>0?(l.diffArq>=0?'+':'')+fmt(l.diffArq):'—';
-            const abClass=l.abiertos>0?'exec-pill-warn':'exec-pill-neu';
-            return`<tr>
-              <td>${l.nombre}</td>
-              <td><span class="exec-pill ${fcClass}"><span class="exec-dot ${fcClass.replace('exec-pill-','exec-dot-')}"></span>${fcTxt}</span></td>
-              <td><span class="exec-pill ${l.cerrados>0?dClass:'exec-pill-neu'}">${dTxt}</span></td>
-              <td style="color:var(--t2)">${l.cerrados}</td>
-              <td><span class="exec-pill ${abClass}">${l.abiertos>0?l.abiertos+' abierto(s)':'—'}</span></td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function toggleSidebar(){
-  const sb=document.getElementById('sidebar');
-  const sbE=document.getElementById('sidebarE');
-  const ov=document.getElementById('sbOverlay');
-  const ovE=document.getElementById('sbOverlayE');
-  const isExec=document.getElementById('sExecView').style.display!=='none';
-  if(isExec){sbE.classList.toggle('open');ovE.classList.toggle('hidden');}
-  else{sb.classList.toggle('open');ov.classList.toggle('hidden');}
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarE').classList.remove('open');
-  document.getElementById('sbOverlay').classList.add('hidden');
-  document.getElementById('sbOverlayE').classList.add('hidden');
-}
-
+function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sbOverlay');sb.classList.toggle('open');ov.classList.toggle('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.add('hidden');}
 function scrollToTop(){window.scrollTo(0,0);closeSidebar();}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeSidebar();}
 
