@@ -342,7 +342,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
       </div>
     </div>
     <!-- 09C-0: Badge entorno DEMO — siempre visible -->
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO · Café del Sur</div>
+    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-sep"></div>
     <div class="hdr-disponible">
       <div class="hdr-disponible-lbl">Disponible real</div>
@@ -528,7 +528,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
     </div>
     <div class="hdr-sep"></div>
     <!-- 09C-0: Badge DEMO -->
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO · Café del Sur</div>
+    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-periodo">
       <button class="hdr-nav-btn" onclick="execCambiarMes(-1)">&lsaquo;</button>
       <div class="hdr-mes-lbl" id="execHdrMes">—</div>
@@ -571,6 +571,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
       </div>
     </nav>
     <main class="dash-main">
+      <!-- 09C: selector locales sticky ejecutiva -->
+      <div class="locales-sticky" id="localesBarExec"><span class="locales-lbl">Locales:</span></div>
     <div class="dash-body">
       <div id="execBody"><div class="spwrap"><div class="spinner"></div> Cargando...</div></div>
       <div style="height:40px"></div>
@@ -592,7 +594,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         <div class="hdr-logo-sub">Financiero</div>
       </div>
     </div>
-    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO · Café del Sur</div>
+    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-sep"></div>
     <div class="hdr-periodo">
       <button class="hdr-nav-btn" onclick="finCambiarMes(-1)">&lsaquo;</button>
@@ -852,27 +854,41 @@ async function cambiarMes(dir){
 }
 
 function renderPastillas(){
-  const bar=document.getElementById('localesBar');
-  bar.innerHTML='<span class="locales-lbl">Locales:</span>';
-  const bt=document.createElement('button');
-  bt.className='local-pill pill-all'+(localesActivos.size===todosLocales.length?' active':'');
-  bt.textContent='Todos';bt.onclick=toggleTodos;bar.appendChild(bt);
-  todosLocales.forEach((loc,i)=>{
-    const p=document.createElement('button');
-    p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
-    const nombre=loc.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
-    p.textContent=nombre;p.title=loc.nombre;
-    p.onclick=()=>toggleLocal(loc.id);bar.appendChild(p);
+  // 09C: actualizar los 3 selectores de locales (oper, exec, fin)
+  ['localesBar','localesBarExec','localesBarFin'].forEach(barId=>{
+    const bar=document.getElementById(barId);
+    if(!bar) return;
+    bar.innerHTML='<span class="locales-lbl">Locales:</span>';
+    const bt=document.createElement('button');
+    bt.className='local-pill pill-all'+(localesActivos.size===todosLocales.length?' active':'');
+    bt.textContent='Todos';
+    bt.onclick=()=>{toggleTodos();};
+    bar.appendChild(bt);
+    todosLocales.forEach((loc,i)=>{
+      const p=document.createElement('button');
+      p.className='local-pill lc'+i+(localesActivos.has(loc.id)?' active':'');
+      const nombre=loc.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
+      p.textContent=nombre;p.title=loc.nombre;
+      p.onclick=()=>toggleLocal(loc.id);
+      bar.appendChild(p);
+    });
   });
 }
 function toggleLocal(id){
   if(localesActivos.has(id)){if(localesActivos.size===1)return;localesActivos.delete(id);}
   else localesActivos.add(id);
-  renderPastillas();loadDash();
+  renderPastillas();
+  // 09C: recargar la vista activa según cuál está visible
+  if(document.getElementById('sFinView')?.style.display!=='none') renderVistaFin();
+  else if(document.getElementById('sExecView')?.style.display!=='none') loadExecDash();
+  else loadDash();
 }
 function toggleTodos(){
   localesActivos=localesActivos.size===todosLocales.length?new Set([todosLocales[0].id]):new Set(todosLocales.map(l=>l.id));
-  renderPastillas();loadDash();
+  renderPastillas();
+  if(document.getElementById('sFinView')?.style.display!=='none') renderVistaFin();
+  else if(document.getElementById('sExecView')?.style.display!=='none') loadExecDash();
+  else loadDash();
 }
 
 async function loadDash(){
@@ -1309,7 +1325,8 @@ function renderCompras(movs,cierres){
 
 /* UI */
 /* ── VISTA EJECUTIVA ─────────────────────────────────── */
-let execMesYear=new Date().getFullYear(),execMesMonth=new Date().getMonth();
+// 09C-0: Default abril 2026 — último mes con datos en demo
+let execMesYear=2026,execMesMonth=3;
 
 const LC_EXEC=['#2F6FED','#059669','#D97706','#7C3AED','#DC2626','#0891B2'];
 
