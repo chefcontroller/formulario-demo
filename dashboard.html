@@ -260,14 +260,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
   .dash-main{margin-left:0}
   .hdr-disponible,.hdr-sep{display:none}
   .hdr-periodo{margin-left:auto}
-  /* KPIs: 2 columnas en mobile */
   .kpi-grid{grid-template-columns:1fr 1fr}
-  /* Bell: ancla a la izquierda para no salir de pantalla */
   .bell-dropdown{position:fixed;top:54px;left:10px;right:10px;width:auto;max-width:none}
-  /* Panel métricas: ancho completo */
   .met-panel{width:100%;max-width:100%;border-left:none}
   .btn-metricas span{display:none}
-  /* Locales: wrap limpio */
   .locales-bar{gap:6px}
   .local-pill{font-size:11px;padding:4px 10px}
 }
@@ -335,11 +331,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         </div>
       </div>
       <button class="btn-metricas" onclick="toggleMet()">&#9881; Ver métricas</button>
-      <!-- 09C: tabs de vista -->
+      <!-- 09C: tabs de vista — FIX: Financiera deshabilitada hasta sesión 10 -->
       <div class="vista-tabs" id="vistaTabsOper" style="display:none">
         <button class="vista-tab" onclick="showExecView()">Ejecutiva</button>
         <button class="vista-tab active" onclick="showOperView()">Operativa</button>
-        <button class="vista-tab" onclick="showFinView()">Financiera</button>
+        <button class="vista-tab" title="Próximamente — Sesión 10" style="opacity:.45;cursor:not-allowed" disabled>Financiera</button>
       </div>
       <button class="btn-logout-h" onclick="logout()">Salir</button>
     </div>
@@ -568,8 +564,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 
 <script>
 // ============================================================
-// 09C-0 — ENVIRONMENT GUARD — DEMO
-// Supabase: fvlkmxqfqmzbmoofmzcb
+// ENVIRONMENT GUARD — DEMO
+// Supabase project: fvlkmxqfqmzbmoofmzcb
+// Fixes sesión 9 auditoría:
+//   FIX-1: SELECT movimientos exec incluye monto_neto
+//   FIX-2: compras exec usa monto_neto con fallback a monto
+//   FIX-3: Tab Financiera deshabilitada (próximamente sesión 10)
 // ============================================================
 const CC_ENV = 'DEMO';
 const CC_PROD_PROHIBIDOS = ['iki','tradition','nando','mahi','adorado','guapaletas'];
@@ -601,7 +601,7 @@ const fechaHoy=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getM
 const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
 const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');};
 
-let mesYear=2026,mesMonth=3; // 09C-0: default abril demo
+let mesYear=2026,mesMonth=3; // default abril demo
 let userRol='',grupoId='',userEmail='';
 let todosLocales=[],localesActivos=new Set();
 let turnoLocalMap={};
@@ -655,7 +655,6 @@ async function init(){
     if(locs.length)todosLocales=locs;
   }
   if(!todosLocales.length){
-    // Admin sin usuario_local asignado: cargar todos los locales activos
     const{data:locs}=await sb.from('locales').select('id,nombre,codigo').eq('activo',true).order('nombre');
     todosLocales=locs||[];
   }
@@ -664,14 +663,12 @@ async function init(){
   set('sbUser',userEmail+'\n'+userRol);
   set('sbUserE',userEmail+'\n'+userRol);
   renderPastillas();
-  // Mostrar botones de alternancia solo para admin
   if(userRol==='admin'){
     document.getElementById('sbExecBtn').classList.remove('hidden');
     document.getElementById('sbOperBtn').classList.remove('hidden');
   }
   document.getElementById('ldOverlay').classList.add('fade');
   setTimeout(()=>document.getElementById('ldOverlay').remove(),350);
-  // Owner ve solo la vista ejecutiva; admin y supervisor ven la operativa
   if(userRol==='owner'){
     showExecView();
   } else {
@@ -724,13 +721,9 @@ async function loadDash(){
 
   const{data:turnos}=await sb.from('turnos').select('*,cierres_turno(*)').in('local_id',ids).gte('fecha',desde).lte('fecha',hasta).order('fecha').order('numero_turno');
   const todos=turnos||[];
-  // Normalizar cierres_turno: Supabase puede devolver objeto o array según la relación
   todos.forEach(t=>{
-    if(t.cierres_turno&&!Array.isArray(t.cierres_turno)){
-      t.cierres_turno=[t.cierres_turno];
-    } else if(!t.cierres_turno){
-      t.cierres_turno=[];
-    }
+    if(t.cierres_turno&&!Array.isArray(t.cierres_turno)){t.cierres_turno=[t.cierres_turno];}
+    else if(!t.cierres_turno){t.cierres_turno=[];}
   });
   const cerrados=todos.filter(t=>t.estado==='cerrado');
   const cierres=cerrados.map(t=>t.cierres_turno?.[0]).filter(Boolean);
@@ -743,11 +736,8 @@ async function loadDash(){
   const{data:turnosA}=await sb.from('turnos').select('*,cierres_turno(*)').in('local_id',ids).gte('fecha',desdeA).lte('fecha',hastaA);
   const todosA=turnosA||[];
   todosA.forEach(t=>{
-    if(t.cierres_turno&&!Array.isArray(t.cierres_turno)){
-      t.cierres_turno=[t.cierres_turno];
-    } else if(!t.cierres_turno){
-      t.cierres_turno=[];
-    }
+    if(t.cierres_turno&&!Array.isArray(t.cierres_turno)){t.cierres_turno=[t.cierres_turno];}
+    else if(!t.cierres_turno){t.cierres_turno=[];}
   });
   const cierresA=todosA.filter(t=>t.estado==='cerrado').map(t=>t.cierres_turno?.[0]).filter(Boolean);
   let movsA=[];
@@ -819,7 +809,6 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
     return r>=0.01?'sem-ok':r>=-0.02?'sem-warn':'sem-err';
   };
 
-  // Sparklines por dia para cada KPI
   const diasEnMes=new Date(mesYear,mesMonth+1,0).getDate();
   const vDia=Array(diasEnMes).fill(0);
   const cubDia=Array(diasEnMes).fill(0);
@@ -834,7 +823,6 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
     cubDia[d]+=(ci.cubiertos||0);
     if(ci.cubiertos>0)tktDia[d]=Math.round(vDia[d]/cubDia[d]);
   });
-  // foodcost y extras por dia
   movs.forEach(m=>{
     const lid=turnoLocalMap[m.turno_id];if(!lid)return;
     const t=todos.find(x=>x.id===m.turno_id);if(!t)return;
@@ -854,8 +842,6 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
   ];
 
   const grid=document.getElementById('kpiGrid');
-  // Primera vez: crear cards. Siguientes: solo actualizar valores (sin flash)
-  const esNuevo=grid.children.length===0;
   kpis.forEach(k=>{
     if(modsState[k.id]===false){const ex=document.getElementById('card_'+k.id);if(ex)ex.style.display='none';return;}
     let dHtml;
@@ -884,7 +870,6 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
         });
       }
     } else {
-      // Actualizar sin recrear
       card.style.display='';
       const valEl=document.getElementById('val_'+k.id);
       if(valEl)valEl.textContent=k.val;
@@ -892,7 +877,6 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
       if(deltaEl)deltaEl.innerHTML=dHtml;
       const semEl=document.getElementById('sem_'+k.id);
       if(semEl)semEl.className='sem '+k.sem;
-      // Actualizar sparkline data sin destruir el chart
       if(k.spark&&card._sparkChart){
         card._sparkChart.data.datasets[0].data=k.spark;
         card._sparkChart.update('none');
@@ -901,9 +885,8 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
   });
 }
 
-// Variables globales proyección
 let _proyData={cierres:[],todos:[],desde:'',hasta:''};
-let diasLocal=[1,2,3,4,5,6]; // 0=Dom,1=Lun...6=Sáb — por defecto Lun-Sáb
+let diasLocal=[1,2,3,4,5,6];
 
 function toggleDiasModal(){
   const m=document.getElementById('diasModal');
@@ -911,7 +894,6 @@ function toggleDiasModal(){
 }
 function guardarDias(){
   diasLocal=[];
-  // checkboxes: 0=Lun,1=Mar,2=Mié,3=Jue,4=Vie,5=Sáb,6=Dom → mapear a getDay()
   const map=[1,2,3,4,5,6,0];
   for(let i=0;i<7;i++){if(document.getElementById('dia_'+i)?.checked)diasLocal.push(map[i]);}
   toggleDiasModal();
@@ -935,15 +917,12 @@ function renderProyeccion(cierres,todos,desde,hasta){
   let vDia=0;
 
   if(metodo==='prom30'){
-    // Promedio simple: venta total / días transcurridos
     vDia=diasTr>0?vt/diasTr:0;
   } else if(metodo==='diasVendidos'){
-    // Solo días con cierre con venta > 0
     const diasConVenta=new Set();
     todos.forEach(t=>{const ci=t.cierres_turno?.[0];if(ci&&ci.venta_total>0)diasConVenta.add(t.fecha);});
     vDia=diasConVenta.size>0?vt/diasConVenta.size:0;
   } else if(metodo==='mismoDia'){
-    // Promedio del mismo día de la semana en las últimas 4 semanas
     const hoyDate=new Date(hoy+'T12:00:00');
     const hoyDow=hoyDate.getDay();
     const ventasMismoDia=[];
@@ -958,7 +937,6 @@ function renderProyeccion(cierres,todos,desde,hasta){
     vDia=ventasMismoDia.length>0?ventasMismoDia.reduce((a,v)=>a+v,0)/ventasMismoDia.length:vt/Math.max(diasTr,1);
   }
 
-  // Días restantes del mes según días del local
   let diasRestantes=0;
   for(let d=diasTr+1;d<=diasEnMes;d++){
     const fecha=new Date(mesYear,mesMonth,d);
@@ -1024,14 +1002,12 @@ function renderMix(movs){
 
 function renderDelivery(movs,cierres){
   const vt=cierres.reduce((a,c)=>a+(c.venta_total||0),0);
-  // Delivery desde movimientos de origen delivery O por medio_pago de plataformas
   const pyaMovs=movs.filter(m=>m.tipo==='venta'&&(m.medio_pago==='pedidos_ya'||(m.concepto||'').toLowerCase().includes('pedidosya')));
   const rapMovs=movs.filter(m=>m.tipo==='venta'&&(m.medio_pago==='rappi'||(m.concepto||'').toLowerCase().includes('rappi')));
   const mpdMovs=movs.filter(m=>m.tipo==='venta'&&(m.concepto||'').toLowerCase().match(/mp delivery|mercado pago delivery|mpd/));
   const pya=pyaMovs.reduce((a,m)=>a+(m.monto||0),0);
   const rap=rapMovs.reduce((a,m)=>a+(m.monto||0),0);
   const mpd=mpdMovs.reduce((a,m)=>a+(m.monto||0),0);
-  // Efectivo delivery = movs de venta con origen delivery que no son de apps
   const efDeliv=movs.filter(m=>m.tipo==='venta'&&m.origen==='delivery'&&m.medio_pago==='efectivo').reduce((a,m)=>a+(m.monto||0),0);
   const dTotal=pya+rap+mpd+efDeliv;
   const pD=vt>0?dTotal/vt*100:0;
@@ -1095,7 +1071,6 @@ function renderVentaDiaria(todos,movs){
     const c=(c1||c2);
     const diff=(c1?.efectivo_real||0)+(c2?.efectivo_real||0)-(c1?.efectivo_esperado||0)-(c2?.efectivo_esperado||0);
     dias.push({fecha,venta,cub,tkt:cub>0?venta/cub:0,del:venta>0?del/venta*100:0,food:venta>0?food/venta*100:0,ext:venta>0?ext/venta*100:0,diff});
-    // Sin límite — muestra el mes completo
   }
   const sV=dias.reduce((a,d)=>a+d.venta,0),sC=dias.reduce((a,d)=>a+d.cub,0),sDiff=dias.reduce((a,d)=>a+d.diff,0);
   const dc=d=>Math.abs(d)<50?'tok':Math.abs(d)<300?'twarn':'terr';
@@ -1131,11 +1106,9 @@ function renderCompras(movs,cierres){
     rm[k]=(rm[k]||0)+monto;
   });
   const total=Object.values(rm).reduce((a,v)=>a+v,0);
-  const sorted=Object.entries(rm).sort((a,b)=>b[1]-a[1]);
-  const semF=p=>p<5?'sem-ok':p<10?'sem-warn':'sem-err';
-  // Mostrar TODOS los rubros definidos, con $0 si no hay datos
   const allRubros=Object.keys(RUBROS);
   const todosFilas=allRubros.map(k=>{const m=rm[k]||0;return[k,m];}).sort((a,b)=>b[1]-a[1]);
+  const semF=p=>p<5?'sem-ok':p<10?'sem-warn':'sem-err';
   document.getElementById('comprasBody').innerHTML=`
     <table class="fct">
       <thead><tr><th>Rubro</th><th>Monto</th><th>% sobre venta</th><th>Estado</th></tr></thead>
@@ -1144,11 +1117,9 @@ function renderCompras(movs,cierres){
     </table>`;
 }
 
-/* UI */
 /* ── VISTA EJECUTIVA ─────────────────────────────────── */
-let execMesYear=2026,execMesMonth=3; // 09C-0: default abril demo
-
-const LC_EXEC=['#2F6FED','#059669','#D97706','#7C3AED','#DC2626','#0891B2'];
+// FIX-1 y FIX-2: SELECT incluye monto_neto; compras usan monto_neto con fallback a monto
+let execMesYear=2026,execMesMonth=3; // default abril demo
 
 function showExecView(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -1196,12 +1167,12 @@ async function loadExecDash(){
 
   const tids=todos.map(t=>t.id);
   let movs=[];
-  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,origen,concepto').in('turno_id',tids);movs=m||[];}
+  // FIX-1: incluir monto_neto en el SELECT
+  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,monto_neto,origen,concepto').in('turno_id',tids);movs=m||[];}
 
   const{data:cf}=await sb.from('costos_fijos').select('monto,local_id').in('local_id',ids).eq('mes',desde);
   const costosFijos=cf||[];
 
-  // Agrupar por local
   const porLocal={};
   ids.forEach(id=>{porLocal[id]={venta:0,cubiertos:0,compras:0,egresos:0,delivery:0,cfijos:0,cerrados:0,abiertos:0};});
   todos.forEach(t=>{
@@ -1216,13 +1187,13 @@ async function loadExecDash(){
   movs.forEach(m=>{
     const lid=todos.find(t=>t.id===m.turno_id)?.local_id;
     if(!lid||!porLocal[lid])return;
-    if(m.tipo==='compra')porLocal[lid].compras+=(m.monto||0);
+    // FIX-2: usar monto_neto para compras; fallback a monto para registros pre-migración (monto_neto=null)
+    if(m.tipo==='compra')porLocal[lid].compras+=((m.monto_neto!=null?m.monto_neto:m.monto)||0);
     if(m.tipo==='egreso')porLocal[lid].egresos+=(m.monto||0);
     if(m.tipo==='venta'&&m.origen==='delivery')porLocal[lid].delivery+=(m.monto||0);
   });
   costosFijos.forEach(c=>{if(porLocal[c.local_id])porLocal[c.local_id].cfijos+=(c.monto||0);});
 
-  // KPIs consolidados
   const totalVenta=ids.reduce((a,id)=>a+(porLocal[id]?.venta||0),0);
   const totalCub=ids.reduce((a,id)=>a+(porLocal[id]?.cubiertos||0),0);
   const totalComp=ids.reduce((a,id)=>a+(porLocal[id]?.compras||0),0);
@@ -1240,7 +1211,6 @@ async function loadExecDash(){
   const semMarIcon=margen>=8?'🟢':margen>=4?'🟡':'🔴';
   const semMarLbl=margen>=8?'En rango':margen>=4?'Atención':'Crítico';
 
-  // Comparativo agrupado por concepto
   const GRUPOS=[
     {lbl:'Cafés',ids:todosLocales.filter(l=>l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
     {lbl:'Otros',ids:todosLocales.filter(l=>!l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
@@ -1264,7 +1234,7 @@ async function loadExecDash(){
       <td style="color:${fcColor};font-weight:600">${r.cerrados>0?fc.toFixed(1)+'%':'—'}</td>
       <td>${r.venta>0?del.toFixed(1)+'%':'—'}</td>
       <td style="color:${mar>=8?'var(--ok)':mar>=4?'var(--warn)':'var(--err)'}">${r.cerrados>0?fmt(res):'—'}</td>
-      <td style="font-size:16px;text-align:center"><span class="sf" data-label="${marLbl}">${r.cerrados>0?marIcon:'—'}</span></td>
+      <td style="font-size:16px;text-align:center"><span title="${marLbl}">${r.cerrados>0?marIcon:'—'}</span></td>
     </tr>`;
   };
 
@@ -1283,7 +1253,7 @@ async function loadExecDash(){
       <div class="exec-kpi">
         <div class="exec-kpi-lbl">Foodcost</div>
         <div class="exec-kpi-val" style="color:${semFood}">${foodPct.toFixed(1)}%</div>
-        <div class="exec-kpi-sub">Límite grupo: 35% · ${fmt(totalComp)} en compras</div>
+        <div class="exec-kpi-sub">Límite grupo: 35% · ${fmt(totalComp)} en compras netas</div>
       </div>
       <div class="exec-kpi">
         <div class="exec-kpi-lbl">Resultado operativo est.</div>
@@ -1308,7 +1278,7 @@ async function loadExecDash(){
         </table>
       </div>
       <div style="padding:8px 16px;font-size:10px;color:var(--t3)">
-        Resultado est. = Venta − Compras − Egresos − Costos fijos · 🟢 ≥8% · 🟡 4-8% · 🔴 &lt;4%
+        Resultado est. = Venta − Compras netas − Egresos − Costos fijos · 🟢 ≥8% · 🟡 4-8% · 🔴 &lt;4% · P&L aproximado, no incluye impuestos ni amortizaciones.
       </div>
     </div>
 
@@ -1326,14 +1296,12 @@ async function loadExecDash(){
     </div>
   `;
 
-  // Disponible asíncrono
   const{data:ct}=await sb.from('cierres_turno').select('efectivo_real').in('turno_id',tids);
   const efReal=(ct||[]).reduce((a,c)=>a+(c.efectivo_real||0),0);
   const alivios=movs.filter(m=>m.tipo==='alivio').reduce((a,m)=>a+(m.monto||0),0);
   const dispEl=document.getElementById('execDisp');
   if(dispEl)dispEl.textContent=fmt(efReal-alivios);
 }
-
 
 function toggleSidebar(){
   const sb=document.getElementById('sidebar');
