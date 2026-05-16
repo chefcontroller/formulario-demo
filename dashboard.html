@@ -331,12 +331,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         </div>
       </div>
       <button class="btn-metricas" onclick="toggleMet()">&#9881; Ver métricas</button>
-      <!-- 09C: tabs de vista — FIX: Financiera deshabilitada hasta sesión 10 -->
-      <div class="vista-tabs" id="vistaTabsOper" style="display:none">
-        <button class="vista-tab" onclick="showExecView()">Ejecutiva</button>
-        <button class="vista-tab active" onclick="showOperView()">Operativa</button>
-        <button class="vista-tab" title="Próximamente — Sesión 10" style="opacity:.45;cursor:not-allowed" disabled>Financiera</button>
-      </div>
       <button class="btn-logout-h" onclick="logout()">Salir</button>
     </div>
   </div>
@@ -492,6 +486,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
         <div class="hdr-logo-sub">Ejecutivo</div>
       </div>
     </div>
+    <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-sep"></div>
     <div class="hdr-periodo">
       <button class="hdr-nav-btn" onclick="execCambiarMes(-1)">&lsaquo;</button>
@@ -565,11 +560,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 <script>
 // ============================================================
 // ENVIRONMENT GUARD — DEMO
-// Supabase project: fvlkmxqfqmzbmoofmzcb
-// Fixes sesión 9 auditoría:
-//   FIX-1: SELECT movimientos exec incluye monto_neto
-//   FIX-2: compras exec usa monto_neto con fallback a monto
-//   FIX-3: Tab Financiera deshabilitada (próximamente sesión 10)
+// Fix INC-001: monto_neto en exec · sFinView pendiente sesión 10
+// Supabase: fvlkmxqfqmzbmoofmzcb
 // ============================================================
 const CC_ENV = 'DEMO';
 const CC_PROD_PROHIBIDOS = ['iki','tradition','nando','mahi','adorado','guapaletas'];
@@ -1108,17 +1100,16 @@ function renderCompras(movs,cierres){
   const total=Object.values(rm).reduce((a,v)=>a+v,0);
   const allRubros=Object.keys(RUBROS);
   const todosFilas=allRubros.map(k=>{const m=rm[k]||0;return[k,m];}).sort((a,b)=>b[1]-a[1]);
-  const semF=p=>p<5?'sem-ok':p<10?'sem-warn':'sem-err';
   document.getElementById('comprasBody').innerHTML=`
     <table class="fct">
       <thead><tr><th>Rubro</th><th>Monto</th><th>% sobre venta</th><th>Estado</th></tr></thead>
-      <tbody>${todosFilas.map(([k,m])=>{const info=RUBROS[k]||{lbl:k,icon:''}; const pv=vt>0?m/vt*100:0;const dim=m===0?'color:var(--t3)':'';return`<tr style="${dim}"><td>${info.icon} ${info.lbl}</td><td>${m>0?fmt(m):'—'}</td><td>${m>0?pv.toFixed(1)+'%':'—'}</td><td style="text-align:right">${m>0?`<div class="sem ${semF(pv)}" style="display:inline-block"></div>`:''}</td></tr>`;}).join('')}</tbody>
+      <tbody>${todosFilas.map(([k,m])=>{const info=RUBROS[k]||{lbl:k,icon:''};const pv=vt>0?m/vt*100:0;const dim=m===0?'color:var(--t3)':'';const semF=p=>p<5?'sem-ok':p<10?'sem-warn':'sem-err';return`<tr style="${dim}"><td>${info.icon} ${info.lbl}</td><td>${m>0?fmt(m):'—'}</td><td>${m>0?pv.toFixed(1)+'%':'—'}</td><td style="text-align:right">${m>0?`<div class="sem ${semF(pv)}" style="display:inline-block"></div>`:''}</td></tr>`;}).join('')}</tbody>
       <tfoot><tr><td>TOTAL COMPRAS</td><td>${fmt(total)}</td><td>${vt>0?(total/vt*100).toFixed(1)+'%':'—'}</td><td></td></tr></tfoot>
     </table>`;
 }
 
 /* ── VISTA EJECUTIVA ─────────────────────────────────── */
-// FIX-1 y FIX-2: SELECT incluye monto_neto; compras usan monto_neto con fallback a monto
+// FIX INC-001: SELECT incluye monto_neto; acumulación usa monto_neto??monto
 let execMesYear=2026,execMesMonth=3; // default abril demo
 
 function showExecView(){
@@ -1167,8 +1158,13 @@ async function loadExecDash(){
 
   const tids=todos.map(t=>t.id);
   let movs=[];
-  // FIX-1: incluir monto_neto en el SELECT
-  if(tids.length){const{data:m}=await sb.from('movimientos').select('turno_id,tipo,monto,monto_neto,origen,concepto').in('turno_id',tids);movs=m||[];}
+  if(tids.length){
+    // FIX INC-001: monto_neto incluido en el SELECT para calcular foodcost correcto
+    const{data:m}=await sb.from('movimientos')
+      .select('turno_id,tipo,monto,monto_neto,origen,concepto')
+      .in('turno_id',tids);
+    movs=m||[];
+  }
 
   const{data:cf}=await sb.from('costos_fijos').select('monto,local_id').in('local_id',ids).eq('mes',desde);
   const costosFijos=cf||[];
@@ -1187,8 +1183,8 @@ async function loadExecDash(){
   movs.forEach(m=>{
     const lid=todos.find(t=>t.id===m.turno_id)?.local_id;
     if(!lid||!porLocal[lid])return;
-    // FIX-2: usar monto_neto para compras; fallback a monto para registros pre-migración (monto_neto=null)
-    if(m.tipo==='compra')porLocal[lid].compras+=((m.monto_neto!=null?m.monto_neto:m.monto)||0);
+    // FIX INC-001: usar monto_neto para compras; fallback a monto si neto es null
+    if(m.tipo==='compra')porLocal[lid].compras+=(m.monto_neto??m.monto)||0;
     if(m.tipo==='egreso')porLocal[lid].egresos+=(m.monto||0);
     if(m.tipo==='venta'&&m.origen==='delivery')porLocal[lid].delivery+=(m.monto||0);
   });
@@ -1214,125 +1210,4 @@ async function loadExecDash(){
   const GRUPOS=[
     {lbl:'Cafés',ids:todosLocales.filter(l=>l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
     {lbl:'Otros',ids:todosLocales.filter(l=>!l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
-  ].filter(g=>g.ids.length);
-
-  const filaLocal=l=>{
-    const r=porLocal[l.id]||{};
-    const fc=r.venta>0?r.compras/r.venta*100:0;
-    const del=r.venta>0?r.delivery/r.venta*100:0;
-    const res=r.venta-r.compras-r.egresos-r.cfijos;
-    const mar=r.venta>0?res/r.venta*100:0;
-    const fcColor=fc>40?'var(--err)':fc>35?'var(--warn)':'var(--ok)';
-    const marIcon=mar>=8?'🟢':mar>=4?'🟡':'🔴';
-    const marLbl=mar>=8?'En rango':mar>=4?'Atención':'Crítico';
-    const nombre=l.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
-    return`<tr>
-      <td title="${l.nombre}" style="font-weight:500">${nombre}</td>
-      <td>${r.venta>0?fmt(r.venta):'—'}</td>
-      <td>${r.cubiertos>0?fmtN(r.cubiertos):'—'}</td>
-      <td>${r.cubiertos>0?fmt(r.venta/r.cubiertos):'—'}</td>
-      <td style="color:${fcColor};font-weight:600">${r.cerrados>0?fc.toFixed(1)+'%':'—'}</td>
-      <td>${r.venta>0?del.toFixed(1)+'%':'—'}</td>
-      <td style="color:${mar>=8?'var(--ok)':mar>=4?'var(--warn)':'var(--err)'}">${r.cerrados>0?fmt(res):'—'}</td>
-      <td style="font-size:16px;text-align:center"><span title="${marLbl}">${r.cerrados>0?marIcon:'—'}</span></td>
-    </tr>`;
-  };
-
-  const tablaGrupos=GRUPOS.map(g=>`
-    <tr style="background:var(--bg)"><td colspan="8" style="font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:6px 12px">${g.lbl}</td></tr>
-    ${todosLocales.filter(l=>g.ids.includes(l.id)).map(filaLocal).join('')}
-  `).join('');
-
-  body.innerHTML=`
-    <div class="exec-kpi-grid" style="grid-template-columns:repeat(3,1fr)">
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Venta total grupo</div>
-        <div class="exec-kpi-val">${fmt(totalVenta)}</div>
-        <div class="exec-kpi-sub">Operaciones: ${fmtN(totalCub)} · Prom. ${tktProm>0?fmt(tktProm):'—'}</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Foodcost</div>
-        <div class="exec-kpi-val" style="color:${semFood}">${foodPct.toFixed(1)}%</div>
-        <div class="exec-kpi-sub">Límite grupo: 35% · ${fmt(totalComp)} en compras netas</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Resultado operativo est.</div>
-        <div class="exec-kpi-val" style="color:${semMar}">${fmt(resultado)}</div>
-        <div class="exec-kpi-sub">${semMarIcon} Margen ${margen.toFixed(1)}% · ${semMarLbl}</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">Comparativo de locales</div>
-        <div class="panel-sub">${MESES[execMesMonth]} ${execMesYear}</div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="exec-sem-table" style="min-width:640px">
-          <thead><tr>
-            <th style="text-align:left">Local</th>
-            <th>Venta</th><th>Operaciones</th><th>Prom.</th>
-            <th>Foodcost</th><th>Delivery</th><th>Resultado est.</th><th>Estado</th>
-          </tr></thead>
-          <tbody>${tablaGrupos}</tbody>
-        </table>
-      </div>
-      <div style="padding:8px 16px;font-size:10px;color:var(--t3)">
-        Resultado est. = Venta − Compras netas − Egresos − Costos fijos · 🟢 ≥8% · 🟡 4-8% · 🔴 &lt;4% · P&L aproximado, no incluye impuestos ni amortizaciones.
-      </div>
-    </div>
-
-    <div class="exec-kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-top:0">
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Delivery total</div>
-        <div class="exec-kpi-val">${fmt(totalDel)}</div>
-        <div class="exec-kpi-sub">${delPct.toFixed(1)}% sobre venta del grupo</div>
-      </div>
-      <div class="exec-kpi">
-        <div class="exec-kpi-lbl">Disponible total</div>
-        <div class="exec-kpi-val" id="execDisp">calculando...</div>
-        <div class="exec-kpi-sub">Efectivo real acumulado</div>
-      </div>
-    </div>
-  `;
-
-  const{data:ct}=await sb.from('cierres_turno').select('efectivo_real').in('turno_id',tids);
-  const efReal=(ct||[]).reduce((a,c)=>a+(c.efectivo_real||0),0);
-  const alivios=movs.filter(m=>m.tipo==='alivio').reduce((a,m)=>a+(m.monto||0),0);
-  const dispEl=document.getElementById('execDisp');
-  if(dispEl)dispEl.textContent=fmt(efReal-alivios);
-}
-
-function toggleSidebar(){
-  const sb=document.getElementById('sidebar');
-  const sbE=document.getElementById('sidebarE');
-  const ov=document.getElementById('sbOverlay');
-  const ovE=document.getElementById('sbOverlayE');
-  const isExec=document.getElementById('sExecView').style.display!=='none';
-  if(isExec){sbE.classList.toggle('open');ovE.classList.toggle('hidden');}
-  else{sb.classList.toggle('open');ov.classList.toggle('hidden');}
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarE').classList.remove('open');
-  document.getElementById('sbOverlay').classList.add('hidden');
-  document.getElementById('sbOverlayE').classList.add('hidden');
-}
-
-function scrollToTop(){window.scrollTo(0,0);closeSidebar();}
-function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeSidebar();}
-
-function toggleBell(){document.getElementById('bellDrop').classList.toggle('hidden');}
-document.addEventListener('click',e=>{if(!document.getElementById('bellWrap')?.contains(e.target))document.getElementById('bellDrop')?.classList.add('hidden');});
-
-function toggleMet(){document.getElementById('metPanel').classList.toggle('open');document.getElementById('metOverlay').classList.toggle('open');}
-function toggleMod(t){t.classList.toggle('on');modsState[t.dataset.mod]=t.classList.contains('on');applyMods();}
-function applyMods(){
-  ['modProy','modGraficos','modMix','secVenta','secCompras','secDelivery'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=modsState[id]===false?'none':'';});
-  ['kpi_venta','kpi_cub','kpi_tkt','kpi_food','kpi_extras','kpi_delivery'].forEach(id=>{const el=document.getElementById('card_'+id);if(el)el.style.display=modsState[id]===false?'none':'';});
-}
-function resetMods(){modsState={};localStorage.removeItem(MODS_KEY);document.querySelectorAll('.toggle').forEach(t=>t.classList.add('on'));applyMods();}
-function guardarMods(){localStorage.setItem(MODS_KEY,JSON.stringify(modsState));toggleMet();}
-</script>
-</body>
-</html>
+  
