@@ -112,7 +112,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
 .kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;gap:4px}
 .kpi-lbl{font-size:10px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sem{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.sem-ok{background:var(--ok)}.sem-warn{background:var(--warn)}.sem-err{background:var(--err)}
+.sem-ok{background:var(--ok)}.sem-warn{background:var(--warn)}.sem-err{background:var(--err)}.sem-neu{background:var(--t3)}
 .kpi-val{font-size:clamp(14px,3.5vw,18px);font-weight:700;color:var(--t);letter-spacing:-.3px;line-height:1.1;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .kpi-foot{display:flex;align-items:center;justify-content:space-between;margin-top:4px;gap:4px;flex-wrap:wrap}
 .kpi-vs{font-size:10px;color:var(--t3);white-space:nowrap}
@@ -313,7 +313,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
     <div style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.5);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#FCD34D;letter-spacing:.5px;flex-shrink:0">DEMO</div>
     <div class="hdr-sep"></div>
     <div class="hdr-disponible">
-      <div class="hdr-disponible-lbl">Disponible real</div>
+      <div class="hdr-disponible-lbl">Efectivo arqueado</div>
       <div class="hdr-disponible-val" id="hdrDisp">$—</div>
     </div>
     <div class="hdr-periodo">
@@ -377,7 +377,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-heig
     <main class="dash-main">
     <div class="dash-body">
 
-      <div class="locales-sticky" id="localesBar"><span class="locales-lbl">Locales:</span></div>
+      <div class="locales-bar" id="localesBar"><span class="locales-lbl">Locales:</span></div>
 
       <!-- KPIs -->
       <div class="kpi-grid" id="kpiGrid"></div>
@@ -751,9 +751,10 @@ async function loadDash(){
 }
 
 function renderDisponible(cierres,movs){
+  // PENDIENTE: lógica definitiva de disponible real depende de CASHFLOW_SOBRES.md
+  // Temporalmente se muestra solo suma de efectivo_real (post-arqueo, post-alivio)
   const ef=cierres.reduce((a,c)=>a+(c.efectivo_real||0),0);
-  const al=movs.filter(m=>m.tipo==='alivio').reduce((a,m)=>a+(m.monto||0),0);
-  set('hdrDisp',fmt(ef-al));
+  set('hdrDisp',fmt(ef));
 }
 
 function renderAlertas(cierres,movs){
@@ -777,8 +778,9 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
   const ct=cierres.reduce((a,c)=>a+(c.cubiertos||0),0);
   const ctA=cierresA.reduce((a,c)=>a+(c.cubiertos||0),0);
   const tkt=ct>0?vt/ct:0;const tktA=ctA>0?vtA/ctA:0;
-  const food=movs.filter(m=>m.tipo==='compra').reduce((a,m)=>a+(m.monto||0),0);
-  const foodA=movsA.filter(m=>m.tipo==='compra').reduce((a,m)=>a+(m.monto||0),0);
+  // INC-001: usar monto_neto para foodcost; fallback a monto si neto es null
+  const food=movs.filter(m=>m.tipo==='compra').reduce((a,m)=>a+((m.monto_neto??m.monto)||0),0);
+  const foodA=movsA.filter(m=>m.tipo==='compra').reduce((a,m)=>a+((m.monto_neto??m.monto)||0),0);
   const pfood=vt>0?food/vt*100:0;const pfoodA=vtA>0?foodA/vtA*100:0;
   const ext=movs.filter(m=>m.tipo==='egreso').reduce((a,m)=>a+(m.monto||0),0);
   const extA=movsA.filter(m=>m.tipo==='egreso').reduce((a,m)=>a+(m.monto||0),0);
@@ -819,7 +821,7 @@ function renderKPIs(cierres,cierresA,movs,movsA,todos){
     const lid=turnoLocalMap[m.turno_id];if(!lid)return;
     const t=todos.find(x=>x.id===m.turno_id);if(!t)return;
     const d=parseInt(t.fecha.split('-')[2])-1;if(d<0||d>=diasEnMes)return;
-    if(m.tipo==='compra')foodDia[d]+=(m.monto||0);
+    if(m.tipo==='compra')foodDia[d]+=((m.monto_neto??m.monto)||0);
     if(m.tipo==='egreso')extDia[d]+=(m.monto||0);
     if(m.tipo==='venta'&&m.origen==='delivery')delvDia[d]+=(m.monto||0);
   });
@@ -1044,7 +1046,7 @@ function renderVentaDiaria(todos,movs){
   const hoy=fechaHoy();
   const idx={};todos.forEach(t=>{idx[t.fecha+'_'+t.numero_turno]=t;});
   const delPT={};movs.filter(m=>m.tipo==='venta'&&m.origen==='delivery').forEach(m=>{delPT[m.turno_id]=(delPT[m.turno_id]||0)+(m.monto||0);});
-  const foodPT={};movs.filter(m=>m.tipo==='compra').forEach(m=>{foodPT[m.turno_id]=(foodPT[m.turno_id]||0)+(m.monto||0);});
+  const foodPT={};movs.filter(m=>m.tipo==='compra').forEach(m=>{foodPT[m.turno_id]=(foodPT[m.turno_id]||0)+((m.monto_neto??m.monto)||0);});
   const extPT={};movs.filter(m=>m.tipo==='egreso').forEach(m=>{extPT[m.turno_id]=(extPT[m.turno_id]||0)+(m.monto||0);});
   const diasEnMes=new Date(mesYear,mesMonth+1,0).getDate();
   const dias=[];
@@ -1079,7 +1081,8 @@ function renderCompras(movs,cierres){
   const vt=cierres.reduce((a,c)=>a+(c.venta_total||0),0);
   const comp=movs.filter(m=>m.tipo==='compra');
   if(!comp.length){document.getElementById('comprasBody').innerHTML='<div class="empty">Sin compras registradas</div>';return;}
-  const g={};comp.forEach(m=>{const k=m.concepto||'Sin concepto';g[k]=(g[k]||0)+(m.monto||0);});
+  // INC-001: usar monto_neto para foodcost; fallback a monto si neto es null
+  const g={};comp.forEach(m=>{const k=m.concepto||'Sin concepto';g[k]=(g[k]||0)+((m.monto_neto??m.monto)||0);});
   const RUBROS={carnes:{lbl:'Carnes',icon:'\uD83E\uDD69'},fyv:{lbl:'Verduras',icon:'\uD83E\uDD6C'},lacteos:{lbl:'Lácteos',icon:'\uD83E\uDD5B'},panes:{lbl:'Panadería',icon:'\uD83C\uDF5E'},almacen:{lbl:'Almacén',icon:'\uD83C\uDFEA'},alcohol:{lbl:'Bebidas c/alc.',icon:'\uD83C\uDF77'},sinAlcohol:{lbl:'Bebidas s/alc.',icon:'\uD83E\uDDE3'},limpieza:{lbl:'Limpieza',icon:'\uD83E\uDDF9'},mantenimiento:{lbl:'Mantenimiento',icon:'\uD83D\uDD27'},pescados:{lbl:'Pescados',icon:'\uD83D\uDC1F'},otros:{lbl:'Otros',icon:'\u22EF\u22EF\u22EF'}};
   const rm={};
   Object.entries(g).forEach(([con,monto])=>{
@@ -1210,4 +1213,126 @@ async function loadExecDash(){
   const GRUPOS=[
     {lbl:'Cafés',ids:todosLocales.filter(l=>l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
     {lbl:'Otros',ids:todosLocales.filter(l=>!l.nombre.toLowerCase().includes('café del sur')).map(l=>l.id)},
-  
+  ].filter(g=>g.ids.length);
+
+  const filaLocal=l=>{
+    const r=porLocal[l.id]||{};
+    const fc=r.venta>0?r.compras/r.venta*100:0;
+    const del=r.venta>0?r.delivery/r.venta*100:0;
+    const res=r.venta-r.compras-r.egresos-r.cfijos;
+    const mar=r.venta>0?res/r.venta*100:0;
+    const fcColor=fc>40?'var(--err)':fc>35?'var(--warn)':'var(--ok)';
+    const marIcon=mar>=8?'🟢':mar>=4?'🟡':'🔴';
+    const marLbl=mar>=8?'En rango':mar>=4?'Atención':'Crítico';
+    const nombre=l.nombre.replace('Café del Sur ','').replace('Bar del Centro ','Bar ');
+    return`<tr>
+      <td title="${l.nombre}" style="font-weight:500">${nombre}</td>
+      <td>${r.venta>0?fmt(r.venta):'—'}</td>
+      <td>${r.cubiertos>0?fmtN(r.cubiertos):'—'}</td>
+      <td>${r.cubiertos>0?fmt(r.venta/r.cubiertos):'—'}</td>
+      <td style="color:${fcColor};font-weight:600">${r.cerrados>0?fc.toFixed(1)+'%':'—'}</td>
+      <td>${r.venta>0?del.toFixed(1)+'%':'—'}</td>
+      <td style="color:${mar>=8?'var(--ok)':mar>=4?'var(--warn)':'var(--err)'}">${r.cerrados>0?fmt(res):'—'}</td>
+      <td style="font-size:16px;text-align:center"><span title="${r.cerrados>0?marLbl:''}">${r.cerrados>0?marIcon:'—'}</span></td>
+    </tr>`;
+  };
+
+  const tablaGrupos=GRUPOS.map(g=>`
+    <tr style="background:var(--bg)"><td colspan="8" style="font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:6px 12px">${g.lbl}</td></tr>
+    ${todosLocales.filter(l=>g.ids.includes(l.id)).map(filaLocal).join('')}
+  `).join('');
+
+  body.innerHTML=`
+    <div class="exec-kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Venta total grupo</div>
+        <div class="exec-kpi-val">${fmt(totalVenta)}</div>
+        <div class="exec-kpi-sub">Operaciones: ${fmtN(totalCub)} · Prom. ${tktProm>0?fmt(tktProm):'—'}</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Foodcost</div>
+        <div class="exec-kpi-val" style="color:${semFood}">${foodPct.toFixed(1)}%</div>
+        <div class="exec-kpi-sub">Límite grupo: 35% · ${fmt(totalComp)} en compras netas</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Resultado operativo est.</div>
+        <div class="exec-kpi-val" style="color:${semMar}">${fmt(resultado)}</div>
+        <div class="exec-kpi-sub">${semMarIcon} Margen ${margen.toFixed(1)}% · ${semMarLbl}</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Comparativo de locales</div>
+        <div class="panel-sub">${MESES[execMesMonth]} ${execMesYear}</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="exec-sem-table" style="min-width:640px">
+          <thead><tr>
+            <th style="text-align:left">Local</th>
+            <th>Venta</th><th>Operaciones</th><th>Prom.</th>
+            <th>Foodcost</th><th>Delivery</th><th>Resultado est.</th><th>Estado</th>
+          </tr></thead>
+          <tbody>${tablaGrupos}</tbody>
+        </table>
+      </div>
+      <div style="padding:8px 16px;font-size:10px;color:var(--t3)">
+        Resultado est. = Venta − Compras netas − Egresos − Costos fijos · 🟢 ≥8% · 🟡 4-8% · 🔴 &lt;4%
+      </div>
+    </div>
+
+    <div class="exec-kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-top:0">
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Delivery total</div>
+        <div class="exec-kpi-val">${fmt(totalDel)}</div>
+        <div class="exec-kpi-sub">${delPct.toFixed(1)}% sobre venta del grupo</div>
+      </div>
+      <div class="exec-kpi">
+        <div class="exec-kpi-lbl">Efectivo arqueado</div>
+        <div class="exec-kpi-val" id="execDisp">calculando...</div>
+        <div class="exec-kpi-sub">Suma efectivo_real · disponible real pendiente sobres</div>
+      </div>
+    </div>
+  `;
+
+  // PENDIENTE: lógica definitiva de disponible real depende de CASHFLOW_SOBRES.md
+  // Temporalmente se muestra solo suma de efectivo_real
+  const{data:ct}=await sb.from('cierres_turno').select('efectivo_real').in('turno_id',tids);
+  const efReal=(ct||[]).reduce((a,c)=>a+(c.efectivo_real||0),0);
+  const dispEl=document.getElementById('execDisp');
+  if(dispEl)dispEl.textContent=fmt(efReal);
+}
+
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const sbE=document.getElementById('sidebarE');
+  const ov=document.getElementById('sbOverlay');
+  const ovE=document.getElementById('sbOverlayE');
+  const isExec=document.getElementById('sExecView').style.display!=='none';
+  if(isExec){sbE.classList.toggle('open');ovE.classList.toggle('hidden');}
+  else{sb.classList.toggle('open');ov.classList.toggle('hidden');}
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarE').classList.remove('open');
+  document.getElementById('sbOverlay').classList.add('hidden');
+  document.getElementById('sbOverlayE').classList.add('hidden');
+}
+
+function scrollToTop(){window.scrollTo(0,0);closeSidebar();}
+function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeSidebar();}
+
+function toggleBell(){document.getElementById('bellDrop').classList.toggle('hidden');}
+document.addEventListener('click',e=>{if(!document.getElementById('bellWrap')?.contains(e.target))document.getElementById('bellDrop')?.classList.add('hidden');});
+
+function toggleMet(){document.getElementById('metPanel').classList.toggle('open');document.getElementById('metOverlay').classList.toggle('open');}
+function toggleMod(t){t.classList.toggle('on');modsState[t.dataset.mod]=t.classList.contains('on');applyMods();}
+function applyMods(){
+  ['modProy','modGraficos','modMix','secVenta','secCompras','secDelivery'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=modsState[id]===false?'none':'';});
+  ['kpi_venta','kpi_cub','kpi_tkt','kpi_food','kpi_extras','kpi_delivery'].forEach(id=>{const el=document.getElementById('card_'+id);if(el)el.style.display=modsState[id]===false?'none':'';});
+}
+function resetMods(){modsState={};localStorage.removeItem(MODS_KEY);document.querySelectorAll('.toggle').forEach(t=>t.classList.add('on'));applyMods();}
+function guardarMods(){localStorage.setItem(MODS_KEY,JSON.stringify(modsState));toggleMet();}
+</script>
+</body>
+</html>
